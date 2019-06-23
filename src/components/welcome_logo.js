@@ -5,13 +5,12 @@ function Welcome_logo() {
         <div>
             <div className="mainLogo">
                 <p className="textLogo" id="paw">
-                    Paw
+                    Final
                 </p>
                 <img src="/paw.png" id="pawLogo" />
                 <p className="textLogo" id="gang">
-                    Gang
+                    Project
                 </p>
-                <p id="paragLogo">The evil version of Paw Patrol...</p>
             </div>
         </div>
     );

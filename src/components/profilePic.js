@@ -15,7 +15,7 @@ class ProfilePic extends Component {
                     src={
                         this.props.imgurl ? this.props.imgurl : "./uglydog.jpg"
                     }
-                    alt={this.props.first + " " + this.props.last}
+                    alt={this.props.username}
                     onClick={this.props.toggle}
                 />
             </div>

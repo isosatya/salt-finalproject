@@ -85,21 +85,29 @@ if (process.env.NODE_ENV != "production") {
 //////////////////////////////////////////////   Routes
 
 app.post("/register", function(req, res) {
-    var first = req.body.first;
-    var last = req.body.last;
-    var email = req.body.email;
-    var password = req.body.password;
+    let username = req.body.username;
+    let age = req.body.age;
+    let city = req.body.city;
+    let email = req.body.email;
+    let password = req.body.password;
+    console.log("req. body registration form", req.body);
+
+    // hashing the password with a function
     bc.hashPassword(password)
         .then(hash => {
-            db.addUsers(first, last, email, hash)
+            db.addUsers(username, age, city, email, hash)
                 .then(results => {
+                    // assigning user id from table to session cookie
                     req.session.usersId = results.rows[0].id;
+                    // sending the user id to front end
                     res.json({ userId: results.rows[0].id });
                 })
                 .catch(err => {
                     if (err.code == 23505) {
+                        // if email already exists send error
                         res.json({ error: 23505 });
                     } else {
+                        // send general error
                         res.json({ error: true });
                     }
                     console.log("Error at addUsers query -->", err);
@@ -113,7 +121,6 @@ app.post("/register", function(req, res) {
 
 app.post("/login", (req, res) => {
     // console.log("req. body for login", req.body);
-
     var email = req.body.email;
     var password = req.body.password;
     db.login(email)
@@ -164,6 +171,7 @@ app.get("/delete", (req, res) => {
     });
 });
 
+// once user is logged in, sending the user info for rendering via the App component
 app.get("/user", (req, res) => {
     db.getUserInfo(req.session.usersId)
         .then(results => {
@@ -284,27 +292,14 @@ app.post("/acceptfriendship/:id", (req, res) => {
 app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
     var url = urlPrefx + req.file.filename;
     var id = req.session.usersId;
+    // updating profile pic in users table
     db.updateProfilePic(id, url)
         .then(() => {
+            // adding pic to database for later deletion in s3 amazon of all user pics
             db.addPicDatabase(id, url);
             res.json(url);
         })
         .catch(err => console.log("Error at UpdateProfilePic", err));
-});
-
-app.post("/updatebio", (req, res) => {
-    var id = req.session.usersId;
-    var bio = req.body.bio;
-    db.updateBio(id, bio)
-        .then(response => res.json(response))
-        .catch(err => console.log("Error at the updateBio query", err));
-});
-
-//////////// REDUX example
-
-app.get("/get-list-animals", (req, res) => {
-    let animals = ["dogs", "cats", "otters", "seagulls"];
-    res.json(animals);
 });
 
 app.get("/friendslist", (req, res) => {
@@ -338,135 +333,135 @@ server.listen(8080, function() {
 });
 
 //////////////////////////////////////// Socket Events
-const onlineUsers = {};
-function dateFormat(date) {
-    return new Date(date).toLocaleString();
-}
+// const onlineUsers = {};
+// function dateFormat(date) {
+//     return new Date(date).toLocaleString();
+// }
 
-io.on("connection", function(socket) {
-    // console.log(`socket with the id ${socket.id} is now connected`);
+// io.on("connection", function(socket) {
+//     // console.log(`socket with the id ${socket.id} is now connected`);
 
-    if (!socket.request.session.usersId) {
-        return socket.disconnect(true);
-    }
-    const usersId = socket.request.session.usersId;
-    // console.log(
-    //     `socket with the id ${socket.id} is now connected with user ${usersId}`
-    // );
-    // console.log("online users", onlineUsers);
+//     if (!socket.request.session.usersId) {
+//         return socket.disconnect(true);
+//     }
+//     const usersId = socket.request.session.usersId;
+//     // console.log(
+//     //     `socket with the id ${socket.id} is now connected with user ${usersId}`
+//     // );
+//     // console.log("online users", onlineUsers);
 
-    const onlineUsersArray = Object.values(onlineUsers);
+//     const onlineUsersArray = Object.values(onlineUsers);
 
-    const found = onlineUsersArray.find(user => {
-        return user == usersId;
-    });
+//     const found = onlineUsersArray.find(user => {
+//         return user == usersId;
+//     });
 
-    if (!found) {
-        onlineUsers[socket.id] = usersId;
-    }
+//     if (!found) {
+//         onlineUsers[socket.id] = usersId;
+//     }
 
-    db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
-        // console.log("onlineUsersInfo query results", results.rows);
-        // socket.emit("onlineUsers", results.rows); //--> emit does the job
-        io.sockets.emit("userJoinedOrLeft", results.rows);
-    });
+//     db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
+//         // console.log("onlineUsersInfo query results", results.rows);
+//         // socket.emit("onlineUsers", results.rows); //--> emit does the job
+//         io.sockets.emit("userJoinedOrLeft", results.rows);
+//     });
 
-    db.getRecentChats().then(results => {
-        // console.log("results for the getRecentChats query", results.rows);
-        results.rows.map(
-            item => (item.created_at = dateFormat(item.created_at))
-        );
-        // console.log("db.getRecentChats", results.rows);
+//     db.getRecentChats().then(results => {
+//         // console.log("results for the getRecentChats query", results.rows);
+//         results.rows.map(
+//             item => (item.created_at = dateFormat(item.created_at))
+//         );
+//         // console.log("db.getRecentChats", results.rows);
 
-        socket.emit("chatMessages", results.rows.reverse());
-    });
+//         socket.emit("chatMessages", results.rows.reverse());
+//     });
 
-    socket.on("chatMessage", msg => {
-        // console.log("listened to chatMessage event ", msg);
+//     socket.on("chatMessage", msg => {
+//         // console.log("listened to chatMessage event ", msg);
 
-        db.addChatMsg(usersId, msg).then(results => {
-            // console.log("results for addChatMsg", results.rows);
+//         db.addChatMsg(usersId, msg).then(results => {
+//             // console.log("results for addChatMsg", results.rows);
 
-            db.getChatAndUserInfo(usersId, results.rows[0].id).then(results => {
-                results.rows.map(
-                    item => (item.created_at = dateFormat(item.created_at))
-                );
+//             db.getChatAndUserInfo(usersId, results.rows[0].id).then(results => {
+//                 results.rows.map(
+//                     item => (item.created_at = dateFormat(item.created_at))
+//                 );
 
-                io.sockets.emit("chatMessage", results.rows[0]);
-            });
-        });
-    });
+//                 io.sockets.emit("chatMessage", results.rows[0]);
+//             });
+//         });
+//     });
 
-    socket.on("privateChatUser", user => {
-        // console.log("usersId who is logged in", usersId);
-        // console.log("other user from chat", user);
-        // console.log("online users table", onlineUsers);
+//     socket.on("privateChatUser", user => {
+//         // console.log("usersId who is logged in", usersId);
+//         // console.log("other user from chat", user);
+//         // console.log("online users table", onlineUsers);
 
-        function getSocketIdByUser(object, value) {
-            return Object.keys(object).find(key => object[key] === value);
-        }
+//         function getSocketIdByUser(object, value) {
+//             return Object.keys(object).find(key => object[key] === value);
+//         }
 
-        const recipientSocketId = getSocketIdByUser(onlineUsers, user);
-        // console.log(`socketId for user ${user}`, recipientSocketId);
+//         const recipientSocketId = getSocketIdByUser(onlineUsers, user);
+//         // console.log(`socketId for user ${user}`, recipientSocketId);
 
-        db.getRecentPrivateChats(usersId, user).then(results => {
-            if (user != usersId) {
-                results.rows.map(
-                    item => (item.created_at = dateFormat(item.created_at))
-                );
+//         db.getRecentPrivateChats(usersId, user).then(results => {
+//             if (user != usersId) {
+//                 results.rows.map(
+//                     item => (item.created_at = dateFormat(item.created_at))
+//                 );
 
-                // console.log("recent private chats", results.rows);
+//                 // console.log("recent private chats", results.rows);
 
-                io.sockets.sockets[recipientSocketId].emit(
-                    "privateChatMsgs",
-                    results.rows.reverse()
-                );
-                socket.emit("privateChatMsgs", results.rows);
-            }
-        });
+//                 io.sockets.sockets[recipientSocketId].emit(
+//                     "privateChatMsgs",
+//                     results.rows.reverse()
+//                 );
+//                 socket.emit("privateChatMsgs", results.rows);
+//             }
+//         });
 
-        socket.on("privateChatMessage", msg => {
-            // console.log("listened private to chatMessage event ", msg);
+//         socket.on("privateChatMessage", msg => {
+//             // console.log("listened private to chatMessage event ", msg);
 
-            db.addPrivateChatMsg(usersId, user, msg).then(results => {
-                // console.log("results for addChatMsg", results.rows);
-                db.getPrivateChatAndUserInfo(usersId, results.rows[0].id).then(
-                    results => {
-                        // console.log(
-                        //     "getPrivateChatAndUserInfo results",
-                        //     results.rows[0]
-                        // );
-                        results.rows.map(
-                            item =>
-                                (item.created_at = dateFormat(item.created_at))
-                        );
-                        io.sockets.emit("privateChatMsg", results.rows[0]);
-                    }
-                );
-            });
-        });
-    });
+//             db.addPrivateChatMsg(usersId, user, msg).then(results => {
+//                 // console.log("results for addChatMsg", results.rows);
+//                 db.getPrivateChatAndUserInfo(usersId, results.rows[0].id).then(
+//                     results => {
+//                         // console.log(
+//                         //     "getPrivateChatAndUserInfo results",
+//                         //     results.rows[0]
+//                         // );
+//                         results.rows.map(
+//                             item =>
+//                                 (item.created_at = dateFormat(item.created_at))
+//                         );
+//                         io.sockets.emit("privateChatMsg", results.rows[0]);
+//                     }
+//                 );
+//             });
+//         });
+//     });
 
-    socket.on("disconnect", function() {
-        // console.log(
-        //     `socket with the id ${
-        //         socket.id
-        //     } is now disconnected with user ${usersId}`
-        // );
+//     socket.on("disconnect", function() {
+//         // console.log(
+//         //     `socket with the id ${
+//         //         socket.id
+//         //     } is now disconnected with user ${usersId}`
+//         // );
 
-        delete onlineUsers[socket.id];
+//         delete onlineUsers[socket.id];
 
-        db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
-            // console.log("onlineUsersInfo query results", results.rows);
-            socket.emit("onlineUsers", results.rows);
-            io.sockets.emit("userJoinedOrLeft", results.rows);
-        });
-    });
+//         db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
+//             // console.log("onlineUsersInfo query results", results.rows);
+//             socket.emit("onlineUsers", results.rows);
+//             io.sockets.emit("userJoinedOrLeft", results.rows);
+//         });
+//     });
 
-    // socket.on("thanks", function(data) {
-    //     console.log(data);
-    // });
-    // socket.emit("welcome", {
-    //     message: "Welome. It is nice to see you"
-    // });
-});
+//     // socket.on("thanks", function(data) {
+//     //     console.log(data);
+//     // });
+//     // socket.emit("welcome", {
+//     //     message: "Welome. It is nice to see you"
+//     // });
+// });

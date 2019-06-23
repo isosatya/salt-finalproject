@@ -56,7 +56,7 @@ class Login extends Component {
                 <div className="formElement">
                     <label className="label">Password</label>
                     <input
-                        type="password"
+                        // type="password"
                         name="password"
                         required="required"
                         className="formField"

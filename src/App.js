@@ -36,13 +36,16 @@ class App extends Component {
     }
 
     handleFileChange(e) {
+        // assigning the file that was selected to this.file.state
         this.setState({ file: e.target.files[0] });
     }
 
     uploadPic() {
+        // create the FormData object
         var formData = new FormData();
+        // assign the file in this.state to the Form
         formData.append("file", this.state.file);
-
+        // posting the new file to the backend
         axios
             .post("/upload", formData)
             .then(resp => {
@@ -70,13 +73,12 @@ class App extends Component {
     render() {
         return (
             <div>
-                {this.state.first && (
+                {this.state.username && (
                     <div>
                         <BrowserRouter>
                             <div>
                                 <Header
-                                    first={this.state.first}
-                                    last={this.state.last}
+                                    username={this.state.username}
                                     imgurl={this.state.imgurl}
                                 />
                                 <Route
@@ -84,10 +86,9 @@ class App extends Component {
                                     path="/"
                                     render={() => (
                                         <Profile
-                                            first={this.state.first}
-                                            last={this.state.last}
-                                            email={this.state.email}
-                                            bio={this.state.bio}
+                                            username={this.state.username}
+                                            age={this.state.age}
+                                            city={this.state.city}
                                             imgurl={this.state.imgurl}
                                             created_at={this.state.created_at}
                                             toggle={this.toggleUploader}
@@ -96,7 +97,7 @@ class App extends Component {
                                         />
                                     )}
                                 />
-                                <Route
+                                {/* <Route
                                     path="/user/:id"
                                     render={props => (
                                         <OtherProfile
@@ -105,19 +106,19 @@ class App extends Component {
                                             history={props.history}
                                         />
                                     )}
-                                />
-                                <Route
+                                /> */}
+                                {/* <Route
                                     path="/users"
                                     render={props => <FindPeople />}
-                                />
-                                <Route
+                                /> */}
+                                {/* <Route
                                     path="/chat"
                                     render={props => <Chatting />}
-                                />
-                                <Route
+                                /> */}
+                                {/* <Route
                                     path="/friends"
                                     render={props => <FriendsList />}
-                                />
+                                /> */}
                             </div>
                         </BrowserRouter>
                         {this.state.uploader && (

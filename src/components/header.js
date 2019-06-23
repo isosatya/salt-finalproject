@@ -1,20 +1,20 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 
-function Header({ imgurl, first, last }) {
+function Header({ imgurl, username }) {
     return (
         <div className="headerContainer">
             <div className="headerLogo">
                 <p className="textHeaderLogo" id="paw">
-                    Paw
+                    Final
                 </p>
-                <img src="/paw.png" id="pawHeaderLogo" />
+                <img src="" id="pawHeaderLogo" />
                 <p className="textHeaderLogo" id="gang">
-                    Gang
+                    Project
                 </p>
             </div>
             <div className="menuContainer">
-                <Link to={`/`}>
+                {/* <Link to={`/`}>
                     <p className="menuHeader">Profile</p>
                 </Link>
                 <Link to={`/friends`}>
@@ -25,15 +25,15 @@ function Header({ imgurl, first, last }) {
                 </Link>
                 <Link to={`/chat`}>
                     <p className="menuHeader">Bark Chat</p>
-                </Link>
+                </Link> */}
             </div>
             <div className="headerPicContainer">
                 <p className="headerMessage">Welcome,</p>
-                <p className="headerMessage">{first + " " + last}</p>
+                <p className="headerMessage">{username}</p>
                 <img
                     className="headerPic"
                     src={imgurl ? imgurl : "./uglydog.jpg"}
-                    alt={first + " " + last}
+                    alt={username}
                 />
             </div>
         </div>

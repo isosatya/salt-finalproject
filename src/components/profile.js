@@ -6,7 +6,6 @@ import {
     TransitionGroup
 } from "react-transition-group";
 import ProfilePic from "./profilePic";
-import BioEditor from "./bioEditor";
 import axios from "axios";
 
 class Profile extends Component {
@@ -37,21 +36,15 @@ class Profile extends Component {
             <div className="profileContainer">
                 <div className="profilePicContainer">
                     <ProfilePic
-                        first={this.props.first}
-                        last={this.props.last}
+                        username={this.props.username}
                         imgurl={this.props.imgurl}
                         toggle={this.props.toggle}
                     />
-                    <div className="nameProfPic">
-                        {this.props.first} {this.props.last}
-                    </div>
+                    <div className="nameProfPic">{this.props.username}</div>
+                    <div className="nameProfPic">{this.props.age}</div>
+                    <div className="nameProfPic">{this.props.city}</div>
                 </div>
                 <div className="bioContainer">
-                    <BioEditor
-                        bio={this.props.bio}
-                        handleChange={this.props.handleChange}
-                        handleSubmit={this.props.handleSubmit}
-                    />
                     <div className="deleteLogContainer">
                         <button onClick={this.delete} id="deleteProfButton">
                             Delete Profile

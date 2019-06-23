@@ -3,24 +3,25 @@ const spicedPg = require("spiced-pg");
 ///////////////// specified for each project
 const dbUrl =
     process.env.DATABASE_URL ||
-    `postgres:postgres:postgres@localhost:5432/salt-socialnetwork`;
+    `postgres:postgres:postgres@localhost:5432/salt-finalproject`;
 var db = spicedPg(dbUrl);
 
 /////////////////////////////////////////////////////////////////////////
 
 module.exports.addUsers = function addUsers(
-    firstName,
-    lastName,
+    username,
+    age,
+    city,
     email,
     password
 ) {
     return db.query(
         `
-        INSERT INTO users (first, last, email, password)
-        VALUES ($1, $2, $3, $4)
+        INSERT INTO users (username, age, city, email, password)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING id;
     `,
-        [firstName, lastName, email, password]
+        [username, age, city, email, password]
     );
 };
 
@@ -46,7 +47,7 @@ module.exports.login = function login(logEmail) {
 module.exports.getUserInfo = function getUserInfo(id) {
     return db.query(
         `
-        SELECT first, last, email, bio, imgUrl, created_at 
+        SELECT username, age, city, email, imgUrl, created_at 
         FROM users 
         WHERE id = $1;
         `,
@@ -179,12 +180,12 @@ module.exports.getRecentPrivateChats = function getRecentPrivateChats(
     receiver_id
 ) {
     return db.query(
-        ` SELECT users.id, first, last, imgUrl, privatechat.id, text, privatechat.created_at
-        FROM privatechat
+        ` SELECT users.id, first, last, imgUrl, privatechats.id, text, privatechats.created_at
+        FROM privatechats
         JOIN users
         ON (sender_id = $1 AND receiver_id = $2 AND sender_id = users.id)
         OR (sender_id = $2 AND receiver_id = $1 AND sender_id = users.id)
-        ORDER BY privatechat.id DESC
+        ORDER BY privatechats.id DESC
         LIMIT 10;
         `,
         [sender_id, receiver_id]
@@ -209,7 +210,7 @@ module.exports.addPrivateChatMsg = function addPrivateChatMsg(
 ) {
     return db.query(
         `
-        INSERT INTO privatechat (sender_id, receiver_id, text)
+        INSERT INTO privatechats (sender_id, receiver_id, text)
         VALUES ($1, $2, $3)
         RETURNING *;
     `,
@@ -238,10 +239,10 @@ module.exports.getPrivateChatAndUserInfo = function getPrivateChatAndUserInfo(
 ) {
     return db.query(
         `
-    SELECT users.id, first, last, imgUrl, privatechat.id, text, privatechat.created_at
-    FROM privatechat
+    SELECT users.id, first, last, imgUrl, privatechats.id, text, privatechats.created_at
+    FROM privatechats
     JOIN users
-    ON (users.id = $1 AND sender_id = users.id AND privatechat.id = $2)
+    ON (users.id = $1 AND sender_id = users.id AND privatechats.id = $2)
     `,
         [usersid, privatechatsid]
     );
