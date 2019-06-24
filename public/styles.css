@@ -613,7 +613,6 @@ a:visited {
     min-height: 100vh;
     width: 100vw;
     z-index: 50;
-    display: fixed;
     justify-content: center;
     display: flex;
     justify-content: center;
@@ -693,4 +692,19 @@ a:visited {
 
 .acceptedFriendButton {
     background: #f38181;
+}
+
+/* ///////////////////////////////// final project */
+
+.searchMatches {
+    z-index: 40;
+    background: pink;
+    overflow-y: scroll;
+    position: fixed;
+    left: 67.2%;
+    top: 47.5%;
+}
+
+.searchMatches p:hover {
+    background: grey;
 }

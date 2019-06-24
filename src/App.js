@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 import axios from "axios";
 import Profile from "./components/profile";
-import OtherProfile from "./components/otherProfile";
+import BeerProfile from "./components/beerProfile";
 import Uploader from "./components/uploader";
-import FindPeople from "./components/findPeople";
+import FindBeer from "./components/findBeer";
 import Header from "./components/header";
 import FriendsList from "./components/friendsList";
 import Chatting from "./components/chatting";
@@ -97,20 +97,20 @@ class App extends Component {
                                         />
                                     )}
                                 />
-                                {/* <Route
-                                    path="/user/:id"
+                                <Route
+                                    path="/beer/:id"
                                     render={props => (
-                                        <OtherProfile
-                                            key={props.match.url}
+                                        <BeerProfile
+                                            // key={props.match.url}
                                             match={props.match}
-                                            history={props.history}
+                                            // history={props.history}
                                         />
                                     )}
-                                /> */}
-                                {/* <Route
-                                    path="/users"
-                                    render={props => <FindPeople />}
-                                /> */}
+                                />
+                                <Route
+                                    path="/beers"
+                                    render={props => <FindBeer />}
+                                />
                                 {/* <Route
                                     path="/chat"
                                     render={props => <Chatting />}

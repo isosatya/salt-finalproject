@@ -14,29 +14,60 @@ class Registration extends Component {
             password: "",
             error: ""
         };
+        this.cityRef = React.createRef();
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        // this.copyMatch = this.copyMatch.bind(this);
+    }
+
+    componentDidUpdate() {
+        // console.log("this.state.city", this.state.city);
+        // console.log("this.state.matches", this.state.matches);
+
+        if (this.state.city) {
+            let results = [];
+            console.log("doing the search");
+
+            axios
+                .get(
+                    `https://api.mapbox.com/geocoding/v5/mapbox.places/${
+                        this.state.city
+                    }.json?access_token=pk.eyJ1IjoiYW5kcmVzc2luZ2giLCJhIjoiY2p4OTBvYXc5MHF5eDN6bzFjcmptajJpcSJ9.5Tol6P4vdEEbHtgyOzZcQw&country=DE&types=region,place`
+                )
+                .then(response => {
+                    if (response.data.features.length) {
+                        for (
+                            var i = 0;
+                            i < response.data.features.length;
+                            i++
+                        ) {
+                            results[i] = response.data.features[i].place_name;
+                        }
+                        this.setState({ matches: results, city: null });
+                    }
+                })
+                .catch(err => {
+                    console.log("error at the search get route", err);
+                });
+        }
     }
 
     handleChange(e) {
         // update the state based on change in input field
         this.setState({ [e.target.name]: e.target.value });
-
-        if (e.target.name == "city") {
-            console.log("about to make city search");
-        }
     }
 
     handleSubmit(e) {
         // no submission needed because axios does the job instead
         e.preventDefault();
         console.log("this.state", this.state);
+        console.log("this.cityRef.current.value", this.cityRef.current.value);
 
         axios
             .post("/register", {
                 username: this.state.username,
                 age: this.state.age,
-                city: this.state.city,
+                city: this.cityRef.current.value,
                 email: this.state.email,
                 password: this.state.password
             })
@@ -67,7 +98,7 @@ class Registration extends Component {
                         name="username"
                         required="required"
                         className="formField"
-                        value={this.state.username}
+                        // value={this.state.username}
                         onChange={this.handleChange}
                     />
                 </div>
@@ -79,7 +110,7 @@ class Registration extends Component {
                         min="18"
                         required="required"
                         className="formField"
-                        value={this.state.age}
+                        // value={this.state.age}
                         onChange={this.handleChange}
                     />
                 </div>
@@ -89,10 +120,35 @@ class Registration extends Component {
                         name="city"
                         required="required"
                         className="formField"
-                        value={this.state.city}
+                        ref={this.cityRef}
                         onChange={this.handleChange}
                     />
                 </div>
+                {this.state.matches && this.cityRef.current.value && (
+                    <div className="searchMatches">
+                        {this.state.matches.map((match, index) => {
+                            return (
+                                <p
+                                    key={index}
+                                    onClick={() => {
+                                        this.cityRef.current.value = match.slice(
+                                            0,
+                                            match.indexOf(",")
+                                        );
+                                        this.setState({
+                                            matches: null,
+                                            city: null
+                                        });
+                                        // console.log("this.state", this.state);
+                                    }}
+                                >
+                                    {match}
+                                </p>
+                            );
+                        })}
+                    </div>
+                )}
+
                 <div className="formElement">
                     <label className="label">e-Mail</label>
                     <input
@@ -100,7 +156,7 @@ class Registration extends Component {
                         name="email"
                         required="required"
                         className="formField"
-                        value={this.state.email}
+                        // value={this.state.email}
                         onChange={this.handleChange}
                     />
                 </div>
@@ -111,7 +167,7 @@ class Registration extends Component {
                         name="password"
                         required="required"
                         className="formField"
-                        value={this.state.password}
+                        // value={this.state.password}
                         onChange={this.handleChange}
                     />
                 </div>
