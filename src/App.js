@@ -6,7 +6,7 @@ import BeerProfile from "./components/beerProfile";
 import Uploader from "./components/uploader";
 import FindBeer from "./components/findBeer";
 import Header from "./components/header";
-import FriendsList from "./components/friendsList";
+import FriendsList from "./components/beerCellar";
 import Chatting from "./components/chatting";
 
 ///////////// this one is for using HOOKS

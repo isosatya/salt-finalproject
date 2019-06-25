@@ -6,7 +6,7 @@ import { acceptFriendReq } from "./actions";
 import { rejectFriendReq } from "./actions";
 import { cancelFriendship } from "./actions";
 
-class FriendsList extends Component {
+class BeerCellar extends Component {
     componentDidMount() {
         // in function components: props.dispatch()
         this.props.dispatch(receiveFriends());
@@ -77,41 +77,6 @@ class FriendsList extends Component {
                         </div>
                     ))}
                 </div>
-                <p className="titleFriendsList">Already Buddies</p>
-                <div className="friendsPageContainer">
-                    {this.props.friends.map(friend => (
-                        <div key={friend.id}>
-                            <Link to={`/user/${friend.id}`}>
-                                <div className="profilePicContainer acceptedFriendProfile">
-                                    <img
-                                        className="profilePic"
-                                        src={
-                                            friend.imgurl
-                                                ? friend.imgurl
-                                                : "./uglydog.jpg"
-                                        }
-                                        alt={friend.first + " " + friend.last}
-                                    />
-                                    <div className="nameProfPic">
-                                        {friend.first} {friend.last}
-                                    </div>
-                                </div>
-                            </Link>
-                            <div className="friendsButtonContainer">
-                                <button
-                                    className="addFriendButton friendsPageButton acceptedFriendButton"
-                                    onClick={e =>
-                                        this.props.dispatch(
-                                            cancelFriendship(friend.id)
-                                        )
-                                    }
-                                >
-                                    Unfriend
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
             </div>
         );
     }
@@ -133,4 +98,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps)(FriendsList);
+export default connect(mapStateToProps)(BeerCellar);

@@ -95,58 +95,34 @@ module.exports.userSearch = function userSearch(param) {
     );
 };
 
-module.exports.sendFriendReq = function sendFriendReq(senderId, receiverId) {
+module.exports.likeBeer = function likeBeer(userId, beerId) {
     return db.query(
         `
-        INSERT INTO friendships (sender_id, receiver_id)
+        INSERT INTO liked_beers (user_id, beer_id)
         VALUES ($1, $2)
         RETURNING *;
         `,
-        [senderId, receiverId]
+        [userId, beerId]
     );
 };
 
-module.exports.cancelFriendship = function cancelFriendship(
-    senderId,
-    receiverId
-) {
+module.exports.dislikeBeer = function dislikeBeer(userId, beerId) {
     return db.query(
         `
-        DELETE FROM friendships
-        WHERE (sender_id = $1 AND receiver_id = $2)
-        OR (sender_id = $2 AND receiver_id = $1)
+        DELETE FROM liked_beers
+        WHERE (user_id = $1 AND beer_id = $2)
         `,
-        [senderId, receiverId]
+        [userId, beerId]
     );
 };
 
-module.exports.acceptFriendship = function acceptFriendship(
-    senderId,
-    receiverId
-) {
+module.exports.searchLikedBeer = function searchLikedBeer(userId, beerId) {
     return db.query(
         `
-        UPDATE friendships 
-        SET accepted = TRUE 
-        WHERE (sender_id = $1 AND receiver_id = $2)
-        OR (sender_id = $2 AND receiver_id = $1)
-        RETURNING *;
+        SELECT * FROM liked_beers
+        WHERE (user_id = $1 AND beer_id = $2)
         `,
-        [senderId, receiverId]
-    );
-};
-
-module.exports.searchFriendship = function searchFriendship(
-    senderId,
-    receiverId
-) {
-    return db.query(
-        `
-        SELECT * FROM friendships
-        WHERE (sender_id = $1 AND receiver_id = $2)
-        OR (sender_id = $2 AND receiver_id = $1)
-        `,
-        [senderId, receiverId]
+        [userId, beerId]
     );
 };
 

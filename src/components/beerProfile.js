@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import LikeButton from "./likeButton";
 // import ProfilePic from "./profilePic";
-// import FriendButton from "./friendButton";
 
 class BeerProfile extends Component {
     constructor(props) {
@@ -12,24 +12,13 @@ class BeerProfile extends Component {
 
     componentDidMount() {
         let beerId = this.props.match.params.id;
-        axios
-            .get(`https://api.punkapi.com/v2/beers/1?ids=${beerId}`)
-            .then(resp => {
-                console.log("response from server", resp.data);
-                this.setState(resp.data[0]);
-            });
+        console.log("beerId", beerId);
 
-        // axios.get("/otheruser/" + this.props.match.params.id).then(resp => {
-        // if (resp.data.error == 1) {
-        //     alert("Please enter another Profile number for the search");
-        //     this.props.history.push("/");
-        // } else if (resp.data.error == 2) {
-        //     alert("User not found!");
-        //     this.props.history.push("/");
-        // } else {
-        //     this.setState(resp.data[0]);
-        // }
-        // });
+        axios.get(`https://api.punkapi.com/v2/beers/${beerId}`).then(resp => {
+            // console.log("response from server", resp.data[0]);
+
+            this.setState(resp.data[0]);
+        });
     }
 
     render() {
@@ -104,24 +93,9 @@ class BeerProfile extends Component {
                             ))}
                     </div>
                 </div>
-                {/* <div className="profilePicContainer">
-                    <ProfilePic
-                        first={this.state.first}
-                        last={this.state.last}
-                        imgurl={this.state.imgurl}
-                    />
-                    <div className="nameProfPic">
-                        {this.state.first} {this.state.last}
-                    </div>
+                <div>
+                    <LikeButton match={this.props.match.params.id} />
                 </div>
-                <div className="bioContainer">
-                    <div className="bioText otherProfBio">
-                        <p>{this.state.bio}</p>
-                    </div>
-                    <div>
-                        <FriendButton match={this.props.match.params.id} />
-                    </div>
-                </div> */}
             </div>
         );
     }

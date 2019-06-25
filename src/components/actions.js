@@ -13,8 +13,8 @@ import axios from "axios";
 //     });
 // }
 
-export async function receiveFriends() {
-    const { data } = await axios.get("/friendslist");
+export async function getCellar() {
+    const { data } = await axios.get("/beers_list");
     console.log("friends list query results", data);
 
     return {

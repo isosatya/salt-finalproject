@@ -232,35 +232,23 @@ app.get("/users/:val", (req, res) => {
     }
 });
 
-app.post("/friendship/:id", (req, res) => {
+app.post("/search_liked_beer/:id", (req, res) => {
     const loggedUserId = req.session.usersId;
-    const receiverId = req.params.id;
-    db.searchFriendship(loggedUserId, receiverId).then(results => {
+    const beerId = req.params.id;
+    db.searchLikedBeer(loggedUserId, beerId).then(results => {
         if (results.rows.length == 0) {
             // No frienship or friendship request
             res.json({ status: 1 });
         } else {
-            if (results.rows[0].accepted == false) {
-                // No friendship, but there is friendship request
-                if (loggedUserId == results.rows[0].receiver_id) {
-                    // Request sent by the profile owner
-                    res.json({ status: 2 });
-                } else {
-                    // request received by profile owner
-                    res.json({ status: 3 });
-                }
-            } else if (results.rows[0].accepted == true) {
-                // Unfriend
-                res.json({ status: 4 });
-            }
+            res.json({ status: 2 });
         }
     });
 });
 
-app.post("/sendfriendreq/:id", (req, res) => {
-    const senderId = req.session.usersId;
-    const receiverId = req.params.id;
-    db.sendFriendReq(senderId, receiverId).then(results => {
+app.post("/like_beer/:id", (req, res) => {
+    const userId = req.session.usersId;
+    const beerId = req.params.id;
+    db.likeBeer(userId, beerId).then(results => {
         if (results.rows.length != 0) {
             res.json({ success: true });
         } else {
@@ -269,23 +257,11 @@ app.post("/sendfriendreq/:id", (req, res) => {
     });
 });
 
-app.post("/cancelfriendship/:id", (req, res) => {
-    const senderId = req.session.usersId;
-    const receiverId = req.params.id;
-    db.cancelFriendship(senderId, receiverId).then(() => {
+app.post("/dislike_beer/:id", (req, res) => {
+    const userId = req.session.usersId;
+    const beerId = req.params.id;
+    db.dislikeBeer(userId, beerId).then(() => {
         res.json({ success: true });
-    });
-});
-
-app.post("/acceptfriendship/:id", (req, res) => {
-    const senderId = req.session.usersId;
-    const receiverId = req.params.id;
-    db.acceptFriendship(senderId, receiverId).then(results => {
-        if (results.rows[0].accepted == true) {
-            res.json({ success: true });
-        } else {
-            res.json({ success: "" });
-        }
     });
 });
 

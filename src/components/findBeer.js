@@ -13,7 +13,7 @@ function FindBeer() {
 
     useEffect(() => {
         (async () => {
-            console.log("random", random);
+            // console.log("random", random);
 
             if (init == 0) {
                 var x = Math.floor(Math.random() * 10);

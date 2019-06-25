@@ -3,7 +3,7 @@
 @import url("https://fonts.googleapis.com/css?family=Acme&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Acme|Gamja+Flower&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap");
-
+@import url("https://fonts.googleapis.com/css?family=Special+Elite&display=swap");
 /* Celeste     #a9eee6
 Crema       #fefaec
 Rojo        #f38181
@@ -33,7 +33,7 @@ a:visited {
     display: inline-flex;
     height: 100vh;
     align-items: center;
-    background: #a9eee6;
+    background: #364e6bc2;
     margin: 0;
 }
 
@@ -58,10 +58,11 @@ a:visited {
 }
 
 .textLogo {
-    font-family: "Luckiest Guy", cursive;
-    font-size: 50px;
+    font-family: "Special Elite", cursive;
+    font-size: 60px;
+    letter-spacing: 4px;
     height: auto;
-    width: 500px;
+    /* width: 500px; */
     margin: 0;
 }
 #gang {
@@ -71,6 +72,7 @@ a:visited {
 #pawLogo {
     width: 300px;
     height: 300px;
+    margin: 25px;
 }
 
 #paragLogo {

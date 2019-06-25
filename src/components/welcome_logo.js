@@ -5,11 +5,11 @@ function Welcome_logo() {
         <div>
             <div className="mainLogo">
                 <p className="textLogo" id="paw">
-                    Final
+                    Hoppy
                 </p>
-                <img src="/paw.png" id="pawLogo" />
+                <img src="/beer_logo.png" id="pawLogo" />
                 <p className="textLogo" id="gang">
-                    Project
+                    Town
                 </p>
             </div>
         </div>
