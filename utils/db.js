@@ -126,16 +126,12 @@ module.exports.searchLikedBeer = function searchLikedBeer(userId, beerId) {
     );
 };
 
-module.exports.getFriendsList = function getFriendsList(id) {
+module.exports.likedBeersList = function likedBeersList(id) {
     return db.query(
         `
-    SELECT users.id, first, last, imgUrl, accepted
-    FROM friendships
-    JOIN users
-    ON (accepted = false AND receiver_id = $1 AND sender_id = users.id)
-    OR (accepted = true AND receiver_id= $1 AND sender_id = users.id)
-    OR (accepted = true AND sender_id = $1 AND receiver_id = users.id)
-    `,
+        SELECT * FROM liked_beers
+        WHERE (user_id = $1)
+        `,
         [id]
     );
 };

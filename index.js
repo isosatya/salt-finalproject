@@ -278,10 +278,10 @@ app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
         .catch(err => console.log("Error at UpdateProfilePic", err));
 });
 
-app.get("/friendslist", (req, res) => {
+app.get("/beers_list", (req, res) => {
     const id = req.session.usersId;
-    db.getFriendsList(id).then(results => {
-        console.log("results for getFriendsList query", results.rows);
+    db.likedBeersList(id).then(results => {
+        // console.log("results for likedBeerList query", results.rows);
         res.json(results.rows);
     });
 });

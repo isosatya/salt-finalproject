@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { receiveFriends } from "./actions";
+import axios from "axios";
+import { getCellar } from "./actions";
+import LikeButton from "./likeButton";
 import { acceptFriendReq } from "./actions";
 import { rejectFriendReq } from "./actions";
 import { cancelFriendship } from "./actions";
@@ -9,74 +11,79 @@ import { cancelFriendship } from "./actions";
 class BeerCellar extends Component {
     componentDidMount() {
         // in function components: props.dispatch()
-        this.props.dispatch(receiveFriends());
+        this.props.dispatch(getCellar());
+        // console.log("this.props at component did mount", this.props.beers);
+    }
+
+    componentDidUpdate(prevprops) {
+        // console.log("this.props at component did update", this.props.beers);
+        if (prevprops != this.props) {
+            let beersData = [];
+            let promises = [];
+
+            for (let i = 0; i < this.props.beers.length; i++) {
+                let beerId = this.props.beers[i].beer_id;
+                promises.push(
+                    axios.get(`https://api.punkapi.com/v2/beers/${beerId}`)
+                );
+            }
+            Promise.all(promises).then(response => {
+                // console.log("logging data after promise all", response);
+                for (let i = 0; i < response.length; i++) {
+                    beersData.push(response[i].data[0]);
+                }
+                // console.log("beerData", beerData);
+                this.setState({ beersData });
+            });
+        }
     }
 
     render() {
-        // console.log(
-        //     "this.props.friends in friendsList component",
-        //     this.props.friends
-        // );
+        // console.log("this.props at beerCellar component", this.props.beers);
+        console.log("this.state at render", this.state);
 
-        if (!this.props.friends) {
-            console.log("this.props.friends is empty");
-
+        if (!this.state) {
+            console.log("this.state is empty");
             return null;
         }
 
         return (
             <div>
-                <p className="titleFriendsList">Pending Buddies</p>
-                <div className="friendsPageContainer">
-                    {this.props.wannabes.map(wannabe => (
-                        <div key={wannabe.id}>
-                            <div className="friendsListProfContainer">
-                                <Link to={`/user/${wannabe.id}`}>
-                                    <div className="profilePicContainer">
-                                        <img
-                                            className="profilePic"
-                                            src={
-                                                wannabe.imgurl
-                                                    ? wannabe.imgurl
-                                                    : "./uglydog.jpg"
-                                            }
-                                            alt={
-                                                wannabe.first +
-                                                " " +
-                                                wannabe.last
-                                            }
-                                        />
-                                        <div className="nameProfPic">
-                                            {wannabe.first} {wannabe.last}
+                <p className="titleFriendsList">Beer Cellar</p>
+                {/* {this.state.beersData && <h1>Found some beers</h1>} */}
+
+                {this.state.beersData ? (
+                    <div className="friendsPageContainer">
+                        <h1> Beer state</h1>
+                        {this.state.beersData.map(beer => (
+                            <div key={beer.id}>
+                                <div className="friendsListProfContainer">
+                                    <Link to={`/beer/${beer.id}`}>
+                                        <div className="profilePicContainer">
+                                            <img
+                                                className="profilePic"
+                                                src={
+                                                    beer.image_url
+                                                        ? beer.image_url
+                                                        : "./uglydog.jpg"
+                                                }
+                                                alt={beer.name}
+                                            />
+                                            <div className="nameProfPic">
+                                                {beer.name}
+                                            </div>
                                         </div>
+                                    </Link>
+                                    <div className="friendsButtonContainer">
+                                        <LikeButton match={beer.id} />
                                     </div>
-                                </Link>
-                                <div className="friendsButtonContainer">
-                                    <button
-                                        className="addFriendButton friendsPageButton"
-                                        onClick={e =>
-                                            this.props.dispatch(
-                                                rejectFriendReq(wannabe.id)
-                                            )
-                                        }
-                                    >
-                                        Reject Friend Request
-                                    </button>
-                                    <button
-                                        className="addFriendButton friendsPageButton"
-                                        onClick={e =>
-                                            this.props.dispatch(
-                                                acceptFriendReq(wannabe.id)
-                                            )
-                                        }
-                                    >
-                                        Accept Friend Request
-                                    </button>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                ) : (
+                    <h1>No beers yets!</h1>
+                )}
             </div>
         );
     }
@@ -88,13 +95,7 @@ const mapStateToProps = state => {
     return {
         // call this property however you want --> thats the name the props will receive for this component
         // listAnimals is coming from the REDUCER file
-        friends:
-            state.listFriends &&
-            state.listFriends.filter(friend => friend.accepted === true),
-
-        wannabes:
-            state.listFriends &&
-            state.listFriends.filter(wannabe => wannabe.accepted === false)
+        beers: state.listBeers && state.listBeers
     };
 };
 

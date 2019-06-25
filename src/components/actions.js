@@ -15,11 +15,11 @@ import axios from "axios";
 
 export async function getCellar() {
     const { data } = await axios.get("/beers_list");
-    console.log("friends list query results", data);
+    // console.log("beers list query results", data);
 
     return {
-        type: "RECEIVE_FRIENDS",
-        friendsList: data
+        type: "GET_BEERS",
+        beersList: data
     };
 }
 

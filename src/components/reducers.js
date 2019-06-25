@@ -10,10 +10,10 @@
 // }
 
 export default function reducer(state = {}, action) {
-    if (action.type === "RECEIVE_FRIENDS") {
+    if (action.type === "GET_BEERS") {
         return {
             ...state,
-            listFriends: action.friendsList
+            listBeers: action.beersList
         };
     }
 

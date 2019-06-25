@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 // import { HashRouter, Route } from "react-router-dom";
+import axios from "axios";
 import {
     Transition,
     CSSTransition,
     TransitionGroup
 } from "react-transition-group";
 import ProfilePic from "./profilePic";
-import axios from "axios";
+import BeerCellar from "./beerCellar";
 
 class Profile extends Component {
     constructor(props) {
@@ -53,6 +54,9 @@ class Profile extends Component {
                             Logout
                         </button>
                     </div>
+                </div>
+                <div>
+                    <BeerCellar />
                 </div>
             </div>
         );
