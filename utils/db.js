@@ -47,10 +47,22 @@ module.exports.login = function login(logEmail) {
 module.exports.getUserInfo = function getUserInfo(id) {
     return db.query(
         `
-        SELECT username, age, city, email, imgUrl, created_at 
+        SELECT username, age, city, imgUrl
         FROM users 
         WHERE id = $1;
         `,
+        [id]
+    );
+};
+
+module.exports.getUserAndCellar = function getUserAndCellar(id) {
+    return db.query(
+        `
+    SELECT users.id, username, age, city, imgUrl, beer_id
+    FROM liked_beers
+    JOIN users
+    ON (users.id = $1 AND user_id = users.id)
+    `,
         [id]
     );
 };

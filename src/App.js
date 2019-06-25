@@ -6,6 +6,7 @@ import BeerProfile from "./components/beerProfile";
 import Uploader from "./components/uploader";
 import FindBeer from "./components/findBeer";
 import Header from "./components/header";
+import OtherProfile from "./components/otherProfile";
 import FriendsList from "./components/beerCellar";
 import Chatting from "./components/chatting";
 
@@ -25,6 +26,8 @@ class App extends Component {
 
     componentDidMount() {
         axios.get("/user").then(results => {
+            console.log("about to run get user at component did mount");
+
             this.setState(results.data[0]);
         });
     }
@@ -110,6 +113,16 @@ class App extends Component {
                                 <Route
                                     path="/beers"
                                     render={props => <FindBeer />}
+                                />
+                                <Route
+                                    path="/user/:id"
+                                    render={props => (
+                                        <OtherProfile
+                                            key={props.match.url}
+                                            match={props.match}
+                                            history={props.history}
+                                        />
+                                    )}
                                 />
                                 {/* <Route
                                     path="/chat"

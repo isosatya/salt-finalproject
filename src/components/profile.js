@@ -45,19 +45,19 @@ class Profile extends Component {
                     <div className="nameProfPic">{this.props.age}</div>
                     <div className="nameProfPic">{this.props.city}</div>
                 </div>
-                <div className="bioContainer">
-                    <div className="deleteLogContainer">
-                        <button onClick={this.delete} id="deleteProfButton">
-                            Delete Profile
-                        </button>
-                        <button onClick={this.logout} id="logoutProfButton">
-                            Logout
-                        </button>
-                    </div>
+
+                <div className="deleteLogContainer">
+                    <button onClick={this.delete} id="deleteProfButton">
+                        Delete Profile
+                    </button>
+                    <button onClick={this.logout} id="logoutProfButton">
+                        Logout
+                    </button>
                 </div>
-                <div>
+
+                {/* <div>
                     <BeerCellar />
-                </div>
+                </div> */}
             </div>
         );
     }

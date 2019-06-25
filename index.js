@@ -173,8 +173,12 @@ app.get("/delete", (req, res) => {
 
 // once user is logged in, sending the user info for rendering via the App component
 app.get("/user", (req, res) => {
+    console.log("running db.getUserInfo", req.session.usersId);
+
     db.getUserInfo(req.session.usersId)
         .then(results => {
+            console.log("results.rows for getUserInfo", results.rows);
+
             res.json(results.rows);
         })
         .catch(err => {
@@ -184,30 +188,16 @@ app.get("/user", (req, res) => {
 
 app.get("/otheruser/:id", (req, res) => {
     const id = req.params.id;
-    if (id == req.session.usersId) {
-        res.json({ error: 1 });
-    } else {
-        db.getUserInfo(id)
-            .then(results => {
-                if (results.rows.length == 0) {
-                    res.json({ error: 2 });
-                } else {
-                    res.json(results.rows);
-                }
-            })
-            .catch(err => {
-                console.log("Error at the getUserInfo Query", err);
-            });
-    }
-});
+    console.log("running getUserAndCellar for user", id);
 
-app.get("/users/recent", (req, res) => {
-    db.recentUsers()
+    db.getUserAndCellar(id)
         .then(results => {
+            // console.log("results for getUserAndCellar", results.rows);
+
             res.json(results.rows);
         })
         .catch(err => {
-            console.log("Error at the recentUsers query", err);
+            console.log("Error at the getUserAndCellar", err);
         });
 });
 

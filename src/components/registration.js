@@ -108,6 +108,7 @@ class Registration extends Component {
                         name="age"
                         type="number"
                         min="18"
+                        max="99"
                         required="required"
                         className="formField"
                         // value={this.state.age}

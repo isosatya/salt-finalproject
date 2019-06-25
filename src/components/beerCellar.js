@@ -12,6 +12,7 @@ class BeerCellar extends Component {
     componentDidMount() {
         // in function components: props.dispatch()
         this.props.dispatch(getCellar());
+
         // console.log("this.props at component did mount", this.props.beers);
     }
 
@@ -40,7 +41,7 @@ class BeerCellar extends Component {
 
     render() {
         // console.log("this.props at beerCellar component", this.props.beers);
-        console.log("this.state at render", this.state);
+        // console.log("this.state at render", this.state);
 
         if (!this.state) {
             console.log("this.state is empty");
@@ -74,7 +75,16 @@ class BeerCellar extends Component {
                                             </div>
                                         </div>
                                     </Link>
-                                    <div className="friendsButtonContainer">
+                                    <div
+                                        className="friendsButtonContainer"
+                                        onClick={() =>
+                                            setTimeout(() => {
+                                                this.props.dispatch(
+                                                    getCellar()
+                                                );
+                                            }, 300)
+                                        }
+                                    >
                                         <LikeButton match={beer.id} />
                                     </div>
                                 </div>
