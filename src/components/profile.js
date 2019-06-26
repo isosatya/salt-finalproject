@@ -55,9 +55,9 @@ class Profile extends Component {
                     </button>
                 </div>
 
-                {/* <div>
+                <div>
                     <BeerCellar />
-                </div> */}
+                </div>
             </div>
         );
     }

@@ -1,64 +1,53 @@
 import React, { Component } from "react";
 import axios from "axios";
-import ProfilePic from "./profilePic";
+import { BrowserRouter, Route, Link } from "react-router-dom";
+import LikeButton from "./likeButton";
 
 class OtherProfile extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = { count: 0 };
     }
 
     componentDidMount() {
-        // console.log("this.props.match.params.id", this.props.match.params.id);
-
         axios.get("/otheruser/" + this.props.match.params.id).then(resp => {
-            // console.log("response for getUserAndCellar", resp.data);
-
             this.setState(resp.data);
         });
     }
 
     componentDidUpdate(prevprops) {
-        // console.log(
-        //     "component did update this.state values",
-        //     Object.values(this.state)
-        // );
-
         let stateArray = Object.values(this.state);
 
-        if (prevprops != this.state) {
+        // use this condition so it componentDidUpdate doesnt get into an infinte loop
+        // using the count condition. so the if only runs once
+        if (prevprops != this.props.match.params.id && this.state.count != 1) {
             let beersData = [];
             let promises = [];
 
-            for (let i = 0; i < stateArray.length; i++) {
-                console.log("stateArray.length", stateArray.length);
-
+            for (let i = 0; i < stateArray.length - 1; i++) {
                 let beerId = stateArray[i].beer_id;
-                console.log("beerId", beerId);
 
                 promises.push(
                     axios.get(`https://api.punkapi.com/v2/beers/${beerId}`)
                 );
             }
+
             Promise.all(promises).then(response => {
                 // console.log("logging data after promise all", response);
                 for (let i = 0; i < response.length; i++) {
                     beersData.push(response[i].data[0]);
                 }
-                console.log("beerData", beersData);
-                this.setState({ beersData });
+                this.setState({ beersData, count: 1 });
             });
         }
     }
 
     render() {
-        // console.log("this.state at render", this.state);
-
         return (
             <React.Fragment>
-                {Object.keys(this.state).length && (
+                {this.state.count && (
                     <div className="profileContainer">
-                        {/* <div className="profilePicContainer">
+                        <div className="profilePicContainer">
                             <img
                                 className="profilePic"
                                 src={
@@ -77,11 +66,36 @@ class OtherProfile extends Component {
                             <div className="nameProfPic">
                                 {this.state[0].city}
                             </div>
-                        </div> */}
+                        </div>
                     </div>
                 )}
-                {Object.keys(this.state).length && (
-                    <div className="profileContainer" />
+                {this.state.count && (
+                    <div className="">
+                        {this.state.beersData.map(beer => (
+                            <div key={beer.id}>
+                                <div className="friendsListProfContainer">
+                                    <Link to={`/beer/${beer.id}`}>
+                                        <div className="profilePicContainer">
+                                            <img
+                                                className="profilePic"
+                                                src={
+                                                    beer.image_url
+                                                        ? beer.image_url
+                                                        : "./uglydog.jpg"
+                                                }
+                                                alt={beer.name}
+                                            />
+                                            <div className="nameProfPic">
+                                                {beer.name}
+                                            </div>
+                                        </div>
+                                    </Link>
+
+                                    <LikeButton match={beer.id} />
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 )}
             </React.Fragment>
         );

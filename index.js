@@ -173,12 +173,8 @@ app.get("/delete", (req, res) => {
 
 // once user is logged in, sending the user info for rendering via the App component
 app.get("/user", (req, res) => {
-    console.log("running db.getUserInfo", req.session.usersId);
-
     db.getUserInfo(req.session.usersId)
         .then(results => {
-            console.log("results.rows for getUserInfo", results.rows);
-
             res.json(results.rows);
         })
         .catch(err => {
@@ -188,7 +184,6 @@ app.get("/user", (req, res) => {
 
 app.get("/otheruser/:id", (req, res) => {
     const id = req.params.id;
-    console.log("running getUserAndCellar for user", id);
 
     db.getUserAndCellar(id)
         .then(results => {
