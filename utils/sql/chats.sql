@@ -16,11 +16,6 @@ VALUES
 INSERT INTO chats
     (sender_id, text)
 VALUES
-    ("2", 'hey I´m user number 2' );
-
-INSERT INTO chats
-    (sender_id, text)
-VALUES
     (1, 'number 1 testing the chat' );
 
 INSERT INTO chats

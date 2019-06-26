@@ -78,35 +78,6 @@ module.exports.updateProfilePic = function updateProfilePic(id, url) {
     );
 };
 
-module.exports.updateBio = function updateBio(id, text) {
-    return db.query(
-        `
-        UPDATE users 
-        SET bio = $2 
-        WHERE id = $1;
-        `,
-        [id, text]
-    );
-};
-
-module.exports.recentUsers = function recentUsers() {
-    return db.query(
-        `
-        SELECT * FROM users
-        ORDER by created_at DESC
-        LIMIT 3;
-        `
-    );
-};
-
-module.exports.userSearch = function userSearch(param) {
-    return db.query(
-        `SELECT * FROM users 
-        WHERE first ILIKE $1;`,
-        ["%" + param + "%"]
-    );
-};
-
 module.exports.likeBeer = function likeBeer(userId, beerId) {
     return db.query(
         `
@@ -150,7 +121,7 @@ module.exports.likedBeersList = function likedBeersList(id) {
 
 module.exports.getRecentChats = function getRecentChats() {
     return db.query(
-        ` SELECT users.id, first, last, imgUrl, chats.id, text, chats.created_at
+        ` SELECT users.id, username, age, city, imgUrl, chats.id, text, chats.created_at
         FROM chats
         JOIN users
         ON (sender_id = users.id)
@@ -164,7 +135,7 @@ module.exports.getRecentPrivateChats = function getRecentPrivateChats(
     receiver_id
 ) {
     return db.query(
-        ` SELECT users.id, first, last, imgUrl, privatechats.id, text, privatechats.created_at
+        ` SELECT users.id, username, age, city, imgUrl, privatechats.id, text, privatechats.created_at
         FROM privatechats
         JOIN users
         ON (sender_id = $1 AND receiver_id = $2 AND sender_id = users.id)
@@ -208,7 +179,7 @@ module.exports.getChatAndUserInfo = function getChatAndUserInfo(
 ) {
     return db.query(
         `
-    SELECT users.id, first, last, imgUrl, chats.id, text, chats.created_at
+    SELECT users.id, username, age, city, imgUrl, chats.id, text, chats.created_at
     FROM chats
     JOIN users
     ON (users.id = $1 AND sender_id = users.id AND chats.id = $2)
@@ -223,7 +194,7 @@ module.exports.getPrivateChatAndUserInfo = function getPrivateChatAndUserInfo(
 ) {
     return db.query(
         `
-    SELECT users.id, first, last, imgUrl, privatechats.id, text, privatechats.created_at
+    SELECT users.id, username, age, city, imgUrl, privatechats.id, text, privatechats.created_at
     FROM privatechats
     JOIN users
     ON (users.id = $1 AND sender_id = users.id AND privatechats.id = $2)
@@ -276,6 +247,6 @@ module.exports.deleteUserFriendships = function deleteUserFriendships(id) {
 };
 
 module.exports.onlineUsersInfo = function onlineUsersInfo(arrayOfIds) {
-    const query = `SELECT id, first, last, imgUrl FROM users WHERE id = ANY($1)`;
+    const query = `SELECT id, username, age, city, imgUrl FROM users WHERE id = ANY($1)`;
     return db.query(query, [arrayOfIds]);
 };

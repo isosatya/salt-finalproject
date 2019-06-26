@@ -26,7 +26,9 @@ class App extends Component {
 
     componentDidMount() {
         axios.get("/user").then(results => {
-            console.log("about to run get user at component did mount");
+            console.log(
+                "about to run get user at component did mount at final project‚"
+            );
 
             this.setState(results.data[0]);
         });
@@ -124,14 +126,10 @@ class App extends Component {
                                         />
                                     )}
                                 />
-                                {/* <Route
+                                <Route
                                     path="/chat"
                                     render={props => <Chatting />}
-                                /> */}
-                                {/* <Route
-                                    path="/friends"
-                                    render={props => <FriendsList />}
-                                /> */}
+                                />
                             </div>
                         </BrowserRouter>
                         {this.state.uploader && (

@@ -572,7 +572,7 @@ a:visited {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 94%;
+    width: 200px;
 }
 
 #deleteProfButton {
@@ -666,12 +666,12 @@ a:visited {
 
 /* ///////////////////////////////////// Friendslist page */
 
-.friendsPageContainer {
+.beerCellarContainer {
     display: inline-flex;
     flex-wrap: wrap;
     justify-content: center;
     flex-direction: row;
-    width: 100vw;
+    width: 40vw;
 }
 
 .friendsListProfContainer {

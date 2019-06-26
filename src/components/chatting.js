@@ -30,6 +30,8 @@ class Chatting extends Component {
     }
 
     componentDidUpdate() {
+        console.log("chat room");
+
         // console.log(
         //     "this windows scroll height",
         //     this.chatwindow.current.scrollHeight
@@ -59,15 +61,16 @@ class Chatting extends Component {
     }
 
     render() {
-        if (!this.props.chats) {
-            return null;
-        }
+        // if (!this.props.chats) {
+        //     return null;
+        // }
 
         console.log("this.props.chats at chatting", this.props.chats);
 
         return (
             <div className="chatsContainer">
-                <div
+                <h1>CHAT ROOM</h1>
+                {/* <div
                     className="onlineUsers"
                     // onClick={e => console.log("e.target user", e.target)}
                 >
@@ -158,7 +161,7 @@ class Chatting extends Component {
                 </div>
                 <div className="privChats" ref={this.chatwindow2}>
                     <PrivChatting />
-                </div>
+                </div> */}
             </div>
         );
     }

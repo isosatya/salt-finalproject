@@ -294,135 +294,140 @@ server.listen(8080, function() {
 });
 
 //////////////////////////////////////// Socket Events
-// const onlineUsers = {};
-// function dateFormat(date) {
-//     return new Date(date).toLocaleString();
-// }
+const onlineUsers = {};
+function dateFormat(date) {
+    return new Date(date).toLocaleString();
+}
 
-// io.on("connection", function(socket) {
-//     // console.log(`socket with the id ${socket.id} is now connected`);
+io.on("connection", function(socket) {
+    // console.log(`socket with the id ${socket.id} is now connected`);
 
-//     if (!socket.request.session.usersId) {
-//         return socket.disconnect(true);
-//     }
-//     const usersId = socket.request.session.usersId;
-//     // console.log(
-//     //     `socket with the id ${socket.id} is now connected with user ${usersId}`
-//     // );
-//     // console.log("online users", onlineUsers);
+    // if there is no user connected, just return "disconect"
+    if (!socket.request.session.usersId) {
+        return socket.disconnect(true);
+    }
+    const usersId = socket.request.session.usersId;
+    // console.log(
+    //     `socket with the id ${socket.id} is now connected with user ${usersId}`
+    // );
+    // console.log("online users", onlineUsers);
 
-//     const onlineUsersArray = Object.values(onlineUsers);
+    const onlineUsersArray = Object.values(onlineUsers);
 
-//     const found = onlineUsersArray.find(user => {
-//         return user == usersId;
-//     });
+    const found = onlineUsersArray.find(user => {
+        return user == usersId;
+    });
 
-//     if (!found) {
-//         onlineUsers[socket.id] = usersId;
-//     }
+    if (!found) {
+        onlineUsers[socket.id] = usersId;
+    }
 
-//     db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
-//         // console.log("onlineUsersInfo query results", results.rows);
-//         // socket.emit("onlineUsers", results.rows); //--> emit does the job
-//         io.sockets.emit("userJoinedOrLeft", results.rows);
-//     });
+    console.log("online users after connect", onlineUsers);
 
-//     db.getRecentChats().then(results => {
-//         // console.log("results for the getRecentChats query", results.rows);
-//         results.rows.map(
-//             item => (item.created_at = dateFormat(item.created_at))
-//         );
-//         // console.log("db.getRecentChats", results.rows);
+    db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
+        console.log("onlineUsersInfo query results", results.rows);
+        // socket.emit("onlineUsers", results.rows); //--> emit does the job
+        // io.sockets.emit("userJoinedOrLeft", results.rows);
+    });
 
-//         socket.emit("chatMessages", results.rows.reverse());
-//     });
+    // db.getRecentChats().then(results => {
+    //     // console.log("results for the getRecentChats query", results.rows);
+    //     results.rows.map(
+    //         item => (item.created_at = dateFormat(item.created_at))
+    //     );
+    //     // console.log("db.getRecentChats", results.rows);
 
-//     socket.on("chatMessage", msg => {
-//         // console.log("listened to chatMessage event ", msg);
+    //     socket.emit("chatMessages", results.rows.reverse());
+    // });
 
-//         db.addChatMsg(usersId, msg).then(results => {
-//             // console.log("results for addChatMsg", results.rows);
+    // socket.on("chatMessage", msg => {
+    //     // console.log("listened to chatMessage event ", msg);
 
-//             db.getChatAndUserInfo(usersId, results.rows[0].id).then(results => {
-//                 results.rows.map(
-//                     item => (item.created_at = dateFormat(item.created_at))
-//                 );
+    //     db.addChatMsg(usersId, msg).then(results => {
+    //         // console.log("results for addChatMsg", results.rows);
 
-//                 io.sockets.emit("chatMessage", results.rows[0]);
-//             });
-//         });
-//     });
+    //         db.getChatAndUserInfo(usersId, results.rows[0].id).then(results => {
+    //             results.rows.map(
+    //                 item => (item.created_at = dateFormat(item.created_at))
+    //             );
 
-//     socket.on("privateChatUser", user => {
-//         // console.log("usersId who is logged in", usersId);
-//         // console.log("other user from chat", user);
-//         // console.log("online users table", onlineUsers);
+    //             io.sockets.emit("chatMessage", results.rows[0]);
+    //         });
+    //     });
+    // });
 
-//         function getSocketIdByUser(object, value) {
-//             return Object.keys(object).find(key => object[key] === value);
-//         }
+    // socket.on("privateChatUser", user => {
+    //     // console.log("usersId who is logged in", usersId);
+    //     // console.log("other user from chat", user);
+    //     // console.log("online users table", onlineUsers);
 
-//         const recipientSocketId = getSocketIdByUser(onlineUsers, user);
-//         // console.log(`socketId for user ${user}`, recipientSocketId);
+    //     function getSocketIdByUser(object, value) {
+    //         return Object.keys(object).find(key => object[key] === value);
+    //     }
 
-//         db.getRecentPrivateChats(usersId, user).then(results => {
-//             if (user != usersId) {
-//                 results.rows.map(
-//                     item => (item.created_at = dateFormat(item.created_at))
-//                 );
+    //     const recipientSocketId = getSocketIdByUser(onlineUsers, user);
+    //     // console.log(`socketId for user ${user}`, recipientSocketId);
 
-//                 // console.log("recent private chats", results.rows);
+    //     db.getRecentPrivateChats(usersId, user).then(results => {
+    //         if (user != usersId) {
+    //             results.rows.map(
+    //                 item => (item.created_at = dateFormat(item.created_at))
+    //             );
 
-//                 io.sockets.sockets[recipientSocketId].emit(
-//                     "privateChatMsgs",
-//                     results.rows.reverse()
-//                 );
-//                 socket.emit("privateChatMsgs", results.rows);
-//             }
-//         });
+    //             // console.log("recent private chats", results.rows);
 
-//         socket.on("privateChatMessage", msg => {
-//             // console.log("listened private to chatMessage event ", msg);
+    //             io.sockets.sockets[recipientSocketId].emit(
+    //                 "privateChatMsgs",
+    //                 results.rows.reverse()
+    //             );
+    //             socket.emit("privateChatMsgs", results.rows);
+    //         }
+    //     });
 
-//             db.addPrivateChatMsg(usersId, user, msg).then(results => {
-//                 // console.log("results for addChatMsg", results.rows);
-//                 db.getPrivateChatAndUserInfo(usersId, results.rows[0].id).then(
-//                     results => {
-//                         // console.log(
-//                         //     "getPrivateChatAndUserInfo results",
-//                         //     results.rows[0]
-//                         // );
-//                         results.rows.map(
-//                             item =>
-//                                 (item.created_at = dateFormat(item.created_at))
-//                         );
-//                         io.sockets.emit("privateChatMsg", results.rows[0]);
-//                     }
-//                 );
-//             });
-//         });
-//     });
+    //     socket.on("privateChatMessage", msg => {
+    //         // console.log("listened private to chatMessage event ", msg);
 
-//     socket.on("disconnect", function() {
-//         // console.log(
-//         //     `socket with the id ${
-//         //         socket.id
-//         //     } is now disconnected with user ${usersId}`
-//         // );
+    //         db.addPrivateChatMsg(usersId, user, msg).then(results => {
+    //             // console.log("results for addChatMsg", results.rows);
+    //             db.getPrivateChatAndUserInfo(usersId, results.rows[0].id).then(
+    //                 results => {
+    //                     // console.log(
+    //                     //     "getPrivateChatAndUserInfo results",
+    //                     //     results.rows[0]
+    //                     // );
+    //                     results.rows.map(
+    //                         item =>
+    //                             (item.created_at = dateFormat(item.created_at))
+    //                     );
+    //                     io.sockets.emit("privateChatMsg", results.rows[0]);
+    //                 }
+    //             );
+    //         });
+    //     });
+    // });
 
-//         delete onlineUsers[socket.id];
+    socket.on("disconnect", function() {
+        // console.log(
+        //     `socket with the id ${
+        //         socket.id
+        //     } is now disconnected with user ${usersId}`
+        // );
 
-//         db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
-//             // console.log("onlineUsersInfo query results", results.rows);
-//             socket.emit("onlineUsers", results.rows);
-//             io.sockets.emit("userJoinedOrLeft", results.rows);
-//         });
-//     });
+        delete onlineUsers[socket.id];
 
-//     // socket.on("thanks", function(data) {
-//     //     console.log(data);
-//     // });
-//     // socket.emit("welcome", {
-//     //     message: "Welome. It is nice to see you"
-//     // });
-// });
+        console.log("online users after disconnect", onlineUsers);
+
+        // db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
+        //     // console.log("onlineUsersInfo query results", results.rows);
+        //     socket.emit("onlineUsers", results.rows);
+        //     io.sockets.emit("userJoinedOrLeft", results.rows);
+        // });
+    });
+
+    // socket.on("thanks", function(data) {
+    //     console.log(data);
+    // });
+    // socket.emit("welcome", {
+    //     message: "Welome. It is nice to see you"
+    // });
+});

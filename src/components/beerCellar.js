@@ -54,7 +54,7 @@ class BeerCellar extends Component {
                 {/* {this.state.beersData && <h1>Found some beers</h1>} */}
 
                 {this.state.beersData ? (
-                    <div className="friendsPageContainer">
+                    <div className="beerCellarContainer">
                         <h1> Beer state</h1>
                         {this.state.beersData.map(beer => (
                             <div key={beer.id}>
