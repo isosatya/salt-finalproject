@@ -17,36 +17,6 @@ export default function reducer(state = {}, action) {
         };
     }
 
-    if (action.type === "ACCEPT_FRIEND") {
-        return {
-            ...state,
-            listFriends: state.listFriends.map(friend => {
-                if (friend.id == action.id) {
-                    return {
-                        ...friend,
-                        // "accepted" here is not a random name, but the name of the property
-                        // which we have to update in the table
-                        accepted: true
-                    };
-                } else {
-                    return friend;
-                }
-            })
-        };
-    }
-
-    if (
-        action.type === "REJECT_FRIEND" ||
-        action.type === "CANCEL_FRIENDSHIP"
-    ) {
-        return {
-            ...state,
-            listFriends: state.listFriends.filter(friend => {
-                return friend.id != action.id;
-            })
-        };
-    }
-
     if (action.type === "RECENT_CHATS") {
         return {
             ...state,

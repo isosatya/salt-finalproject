@@ -130,6 +130,17 @@ module.exports.getRecentChats = function getRecentChats() {
     );
 };
 
+module.exports.addChatMsg = function addChatMsg(sender_id, text) {
+    return db.query(
+        `
+        INSERT INTO chats (sender_id, text)
+        VALUES ($1, $2)
+        RETURNING *;
+    `,
+        [sender_id, text]
+    );
+};
+
 module.exports.getRecentPrivateChats = function getRecentPrivateChats(
     sender_id,
     receiver_id
@@ -144,17 +155,6 @@ module.exports.getRecentPrivateChats = function getRecentPrivateChats(
         LIMIT 10;
         `,
         [sender_id, receiver_id]
-    );
-};
-
-module.exports.addChatMsg = function addChatMsg(sender_id, text) {
-    return db.query(
-        `
-        INSERT INTO chats (sender_id, text)
-        VALUES ($1, $2)
-        RETURNING *;
-    `,
-        [sender_id, text]
     );
 };
 

@@ -26,10 +26,6 @@ class App extends Component {
 
     componentDidMount() {
         axios.get("/user").then(results => {
-            console.log(
-                "about to run get user at component did mount at final project‚"
-            );
-
             this.setState(results.data[0]);
         });
     }

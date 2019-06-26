@@ -23,12 +23,9 @@ export function initSocket(store) {
         store.dispatch(chatMessage(msg));
     });
 
-    socket.on("onlineUsers", users => {
-        // console.log("users online from backend", users);
-        store.dispatch(onlineUsers(users));
-    });
-
     socket.on("userJoinedOrLeft", users => {
+        // console.log("data coming from backend", users);
+
         store.dispatch(userJoinedOrLeft(users));
     });
 
@@ -38,16 +35,12 @@ export function initSocket(store) {
     });
 
     socket.on("privateChatMsg", msg => {
-        // console.log("private messages received from backend", msg);
+        // console.log(
+        //     "private messages received from backend privateChatMsg",
+        //     msg
+        // );
         store.dispatch(privateChatMessage(msg));
     });
-
-    // socket.on("welcome", function(data) {
-    //     console.log(data);
-    //     socket.emit("thanks", {
-    //         message: "Thank you. It is great to be here."
-    //     });
-    // });
 
     return socket;
 }

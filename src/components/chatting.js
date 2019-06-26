@@ -17,11 +17,6 @@ class Chatting extends Component {
         this.submitChat = this.submitChat.bind(this);
     }
     componentDidMount() {
-        // console.log(
-        //     "this windows scroll",
-        //     this.chatwindow.current.scrollHeight
-        // );
-
         if (this.chatwindow.current) {
             this.chatwindow.current.scrollTop =
                 this.chatwindow.current.scrollHeight -
@@ -30,16 +25,6 @@ class Chatting extends Component {
     }
 
     componentDidUpdate() {
-        console.log("chat room");
-
-        // console.log(
-        //     "this windows scroll height",
-        //     this.chatwindow.current.scrollHeight
-        // );
-        // console.log(
-        //     "this windows client height",
-        //     this.chatwindow.current.clientHeight
-        // );
         if (this.chatwindow.current) {
             this.chatwindow.current.scrollTop =
                 this.chatwindow.current.scrollHeight -
@@ -49,28 +34,25 @@ class Chatting extends Component {
 
     handleChange(e) {
         this.setState({ chat: e.target.value });
-        // console.log("this.state.chat", this.state.chat);
     }
 
     submitChat() {
         if (this.chattext.current.value != "") {
             socket.emit("chatMessage", this.state.chat);
-            // console.log("this.chattext.current", this.chattext);
             this.chattext.current.value = "";
         }
     }
 
     render() {
-        // if (!this.props.chats) {
-        //     return null;
-        // }
+        if (!this.props.chats) {
+            return null;
+        }
 
-        console.log("this.props.chats at chatting", this.props.chats);
+        // console.log("this.props at chatting", this.props);
 
         return (
             <div className="chatsContainer">
-                <h1>CHAT ROOM</h1>
-                {/* <div
+                <div
                     className="onlineUsers"
                     // onClick={e => console.log("e.target user", e.target)}
                 >
@@ -85,19 +67,20 @@ class Chatting extends Component {
                                         socket.emit("privateChatUser", user.id)
                                     }
                                 >
-                                    <div className="dot" />
-                                    <img
-                                        className="onlineProfilePic"
-                                        src={
-                                            user.imgurl
-                                                ? user.imgurl
-                                                : "./uglydog.jpg"
-                                        }
-                                        alt={user.first + " " + user.last}
-                                    />
+                                    <div className="dot">
+                                        <img
+                                            className="onlineProfilePic"
+                                            src={
+                                                user.imgurl
+                                                    ? user.imgurl
+                                                    : "./hop.png"
+                                            }
+                                            alt={user.username}
+                                        />
+                                    </div>
                                     <div>
                                         <p className="onlineName">
-                                            {user.first + " " + user.last}
+                                            {user.username}
                                         </p>
                                     </div>
                                 </div>
@@ -118,7 +101,7 @@ class Chatting extends Component {
                                                     ? chat.imgurl
                                                     : "./uglydog.jpg"
                                             }
-                                            alt={chat.first + " " + chat.last}
+                                            alt={chat.username}
                                             onClick={() =>
                                                 socket.emit(
                                                     "privateChatUser",
@@ -127,7 +110,7 @@ class Chatting extends Component {
                                             }
                                         />
                                         <p className="chatName">
-                                            {chat.first + " " + chat.last}
+                                            {chat.username}
                                         </p>
                                     </div>
                                     <div>
@@ -144,7 +127,6 @@ class Chatting extends Component {
                         <textarea
                             rows="3"
                             cols="25"
-                            defaultValue={this.props.chat}
                             ref={this.chattext}
                             onChange={e => this.handleChange(e)}
                             className="chatTextArea"
@@ -161,21 +143,13 @@ class Chatting extends Component {
                 </div>
                 <div className="privChats" ref={this.chatwindow2}>
                     <PrivChatting />
-                </div> */}
+                </div>
             </div>
         );
     }
 }
 
-// handleSubmit(e) {
-//     e.preventDefault();
-//     axios.post("/updatebio", { bio: this.state.bio });
-// }
-
 const mapStateToProps = state => {
-    // console.log("state in map.StateToProps in friendsList component:", state);
-    // console.log("state for chats", state.onlineusers);
-
     return {
         chats: state.chats,
         users: state.onlineusers

@@ -21,18 +21,24 @@ class PrivChatting extends Component {
     }
 
     submitChat() {
-        if (this.chattext.current.value != "") {
-            console.log("this.state.chat", this.state.chat);
-            socket.emit("privateChatMessage", this.state.chat);
+        console.log("log outside of the if at submitchat");
 
-            // console.log("this.chattext.current", this.chattext);
+        if (this.chattext.current.value != "") {
+            console.log(
+                "this.state.chat inside of submitChat",
+                this.state.chat
+            );
+
+            socket.emit("privateChatMessage", this.state.chat);
             this.chattext.current.value = "";
         }
     }
 
     render() {
-        if (!this.props.chats) {
-            // console.log("private this.props.chats is null");
+        // console.log("this.props at render", this.props.priv_chats);
+
+        if (!this.props.priv_chats) {
+            // console.log("private this.props.priv_chats is null");
 
             return (
                 <div>
@@ -45,9 +51,9 @@ class PrivChatting extends Component {
 
         return (
             <div className="privChatWindow">
-                {this.props.chats && (
+                {this.props.priv_chats && (
                     <div>
-                        {this.props.chats.map(chat => (
+                        {this.props.priv_chats.map(chat => (
                             <div key={chat.id}>
                                 <div className="chatPicName">
                                     <img
@@ -57,11 +63,9 @@ class PrivChatting extends Component {
                                                 ? chat.imgurl
                                                 : "./uglydog.jpg"
                                         }
-                                        alt={chat.first + " " + chat.last}
+                                        alt={chat.username}
                                     />
-                                    <p className="chatName">
-                                        {chat.first + " " + chat.last}
-                                    </p>
+                                    <p className="chatName">{chat.username}</p>
                                 </div>
                                 <div>
                                     <p className="chatText">{chat.text}</p>
@@ -73,7 +77,7 @@ class PrivChatting extends Component {
                         ))}
                     </div>
                 )}
-                {this.props.chats.length == 0 && (
+                {this.props.priv_chats.length == 0 && (
                     <div>
                         <p className="noChatMsg">No Barks Yet!!</p>
                     </div>
@@ -102,17 +106,9 @@ class PrivChatting extends Component {
     }
 }
 
-// handleSubmit(e) {
-//     e.preventDefault();
-//     axios.post("/updatebio", { bio: this.state.bio });
-// }
-
 const mapStateToProps = state => {
-    // console.log("state in map.StateToProps in friendsList component:", state);
-    // console.log("state for chats", state.onlineusers);
-
     return {
-        chats: state.priv_chats
+        priv_chats: state.priv_chats
     };
 };
 
