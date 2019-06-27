@@ -41,7 +41,7 @@ class BeerCellar extends Component {
 
     render() {
         // console.log("this.props at beerCellar component", this.props.beers);
-        // console.log("this.state at render", this.state);
+        console.log("this.state at render", this.state);
 
         if (!this.state) {
             console.log("this.state is empty");
@@ -50,7 +50,7 @@ class BeerCellar extends Component {
 
         return (
             <div>
-                <p className="beerCellarTitle">Beer Cellar</p>
+                <p className="beerCellarTitle">Cellar Collection</p>
                 {/* {this.state.beersData && <h1>Found some beers</h1>} */}
 
                 {this.state.beersData ? (
@@ -87,7 +87,7 @@ class BeerCellar extends Component {
                         ))}
                     </div>
                 ) : (
-                    <h1>No beers yets!</h1>
+                    <h1 className="noBeersMsg">No Hops Yet!</h1>
                 )}
             </div>
         );

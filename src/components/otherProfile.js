@@ -49,10 +49,10 @@ class OtherProfile extends Component {
         console.log("this.props at render", this.props);
 
         return (
-            <React.Fragment>
+            <div className="profileContainer">
                 {Object.keys(this.state).length == 2 && (
-                    <div className="profileContainer">
-                        <div className="profilePicContainer">
+                    <div>
+                        <div className="profilePicContainer otherProf">
                             <img
                                 className="profilePic"
                                 src={
@@ -62,7 +62,7 @@ class OtherProfile extends Component {
                                 }
                                 alt={this.props.username}
                             />
-                            <div className="nameProfPic">
+                            <div className="nameProfPic nameProf">
                                 {this.state[0].username}
                             </div>
                             <div className="nameProfPic">
@@ -74,35 +74,40 @@ class OtherProfile extends Component {
                         </div>
                     </div>
                 )}
-                {this.state.count && (
-                    <div className="beerCellarContainer">
-                        {this.state.beersData.map(beer => (
-                            <div key={beer.id}>
-                                <div className="friendsListProfContainer">
-                                    <Link to={`/beer/${beer.id}`}>
-                                        <div className="profilePicContainer">
-                                            <img
-                                                className="profilePic"
-                                                src={
-                                                    beer.image_url
-                                                        ? beer.image_url
-                                                        : "./uglydog.jpg"
-                                                }
-                                                alt={beer.name}
-                                            />
-                                            <div className="nameProfPic">
-                                                {beer.name}
+                <div className="beerCellarContainer">
+                    <p className="beerCellarTitle">Cellar Collection</p>
+                    {this.state.count ? (
+                        <div>
+                            {this.state.beersData.map(beer => (
+                                <div key={beer.id}>
+                                    <div className="friendsListProfContainer">
+                                        <Link to={`/beer/${beer.id}`}>
+                                            <div className="profilePicContainer">
+                                                <img
+                                                    className="profilePic"
+                                                    src={
+                                                        beer.image_url
+                                                            ? beer.image_url
+                                                            : "./uglydog.jpg"
+                                                    }
+                                                    alt={beer.name}
+                                                />
+                                                <div className="nameProfPic">
+                                                    {beer.name}
+                                                </div>
                                             </div>
-                                        </div>
-                                    </Link>
+                                        </Link>
 
-                                    <LikeButton match={beer.id} />
+                                        <LikeButton match={beer.id} />
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </React.Fragment>
+                            ))}
+                        </div>
+                    ) : (
+                        <h1 className="noBeersMsg">No Hops Yet!</h1>
+                    )}
+                </div>
+            </div>
         );
     }
 }

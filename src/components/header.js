@@ -8,7 +8,7 @@ function Header({ imgurl, username }) {
                 <p className="textHeaderLogo" id="paw">
                     Hoppy
                 </p>
-                <img src="./hop.png" id="hopHeaderLogo" />
+                <img src="/hop.png" id="hopHeaderLogo" />
                 <p className="textHeaderLogo" id="gang">
                     Town
                 </p>
