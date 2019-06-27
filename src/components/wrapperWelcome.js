@@ -47,12 +47,12 @@ class Wrapper extends Component {
                         </div>
                     </HashRouter>
                 </div>
-                {/* <Popup
+                <Popup
                     popup={this.state.popup}
                     warning={this.state.warning}
                     handleChange={this.handleChange}
                     hidePopup={this.hidePopup}
-                /> */}
+                />
             </div>
         );
     }

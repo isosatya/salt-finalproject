@@ -10,12 +10,15 @@ class Popup extends Component {
             <div className="wrapperCont">
                 {this.props.popup && (
                     <div className="overlay">
-                        <div className="boxUploader">
-                            <h3>Accept Cookies and Confirm Age</h3>
-                            <div>
+                        <div className="cookiesBox">
+                            <h3 className="acceptCookies">
+                                Accept Cookies and Confirm Age
+                            </h3>
+                            <div className="cookiesAgeCheckbox">
                                 <input
                                     type="checkbox"
                                     name="checkbox1"
+                                    className="checkbox"
                                     onChange={this.props.handleChange}
                                 />
                                 <p>
@@ -23,10 +26,11 @@ class Popup extends Component {
                                     Policy
                                 </p>
                             </div>
-                            <div>
+                            <div className="cookiesAgeCheckbox">
                                 <input
                                     type="checkbox"
                                     name="checkbox2"
+                                    className="checkbox"
                                     onChange={this.props.handleChange}
                                 />
                                 <p>
