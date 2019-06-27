@@ -119,9 +119,23 @@ module.exports.likedBeersList = function likedBeersList(id) {
     );
 };
 
+module.exports.getCities = function getCities() {
+    return db.query(
+        `
+        SELECT DISTINCT city 
+        FROM users
+    `
+    );
+};
+
+module.exports.onlineUsersInfo = function onlineUsersInfo(arrayOfIds) {
+    const query = `SELECT id, username, age, city, imgUrl FROM users WHERE id = ANY($1)`;
+    return db.query(query, [arrayOfIds]);
+};
+
 module.exports.getRecentChats = function getRecentChats() {
     return db.query(
-        ` SELECT users.id, username, age, city, imgUrl, chats.id, text, chats.created_at
+        ` SELECT users.id as userid, username, age, city, imgUrl, chats.id, text, chats.created_at
         FROM chats
         JOIN users
         ON (sender_id = users.id)
@@ -129,6 +143,43 @@ module.exports.getRecentChats = function getRecentChats() {
         LIMIT 10;`
     );
 };
+
+module.exports.getRecentChatsCity = function getRecentChatsCity(city) {
+    return db.query(
+        `SELECT users.id as userid, username, age, city, imgUrl, chats.id, text, chats.created_at
+        FROM chats
+        JOIN users
+        ON (sender_id = users.id)
+        WHERE city = $1
+        ORDER BY chats.id DESC
+        LIMIT 10;`,
+        [city]
+    );
+};
+
+module.exports.onlineUsersInfoByCity = function onlineUsersInfoByCity(
+    arrayOfIds
+) {
+    return db.query(
+        `SELECT id, username, age, city, imgUrl 
+        FROM users 
+        WHERE id = ANY($1)
+        `,
+        [arrayOfIds]
+    );
+};
+
+// module.exports.onlineUsersInfoByCity = function onlineUsersInfoByCity(
+//     arrayOfIds,
+//     city
+// ) {
+//     const query = `SELECT id, username, age, city, imgUrl
+//                 FROM users
+//                 WHERE id = ANY($1)
+//                 AND city = $2
+//                 `;
+//     return db.query(query, [arrayOfIds], [city]);
+// };
 
 module.exports.addChatMsg = function addChatMsg(sender_id, text) {
     return db.query(
@@ -234,19 +285,4 @@ module.exports.deletePicsUserDatabase = function deltePicsUserDatabase(
         `,
         [user_id]
     );
-};
-
-module.exports.deleteUserFriendships = function deleteUserFriendships(id) {
-    return db.query(
-        `
-        DELETE FROM friendships
-        WHERE (sender_id = $1 OR receiver_id = $1)
-        `,
-        [id]
-    );
-};
-
-module.exports.onlineUsersInfo = function onlineUsersInfo(arrayOfIds) {
-    const query = `SELECT id, username, age, city, imgUrl FROM users WHERE id = ANY($1)`;
-    return db.query(query, [arrayOfIds]);
 };

@@ -11,6 +11,8 @@ class OtherProfile extends Component {
 
     componentDidMount() {
         axios.get("/otheruser/" + this.props.match.params.id).then(resp => {
+            console.log("resp.dat at user search", resp.data);
+
             this.setState(resp.data);
         });
     }
@@ -43,9 +45,12 @@ class OtherProfile extends Component {
     }
 
     render() {
+        console.log("this.state at render", this.state);
+        console.log("this.props at render", this.props);
+
         return (
             <React.Fragment>
-                {this.state.count && (
+                {Object.keys(this.state).length == 2 && (
                     <div className="profileContainer">
                         <div className="profilePicContainer">
                             <img
@@ -70,7 +75,7 @@ class OtherProfile extends Component {
                     </div>
                 )}
                 {this.state.count && (
-                    <div className="">
+                    <div className="beerCellarContainer">
                         {this.state.beersData.map(beer => (
                             <div key={beer.id}>
                                 <div className="friendsListProfContainer">

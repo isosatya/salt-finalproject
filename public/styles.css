@@ -4,11 +4,14 @@
 @import url("https://fonts.googleapis.com/css?family=Acme|Gamja+Flower&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Special+Elite&display=swap");
-/* Celeste     #a9eee6
-Crema       #fefaec
-Rojo        #f38181
-Marron      #625772 */
+@import url("https://fonts.googleapis.com/css?family=Francois+One&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Bevan&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Stylish&display=swap");
 
+/* Gris     #303841
+Celeste     #00adb5
+crema       #eeeeee
+orange      #ff5723 */
 body {
     margin: 0;
     background: #fefaec;
@@ -80,23 +83,7 @@ a:visited {
     align-self: flex-end;
 }
 
-.menuContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-}
-
-.menuHeader {
-    font-family: "Luckiest Guy", cursive;
-    font-size: 20px;
-    color: black;
-    height: auto;
-    margin: 40px;
-    letter-spacing: 1px;
-}
-
-/* ///////////////////////////////s///////// Login and registration masks */
+/* //////////////////////////////////////// Login and registration masks */
 
 .formBody {
     margin-left: 120px;
@@ -116,7 +103,7 @@ a:visited {
 }
 
 .formField {
-    background: #e1f9f6;
+    background: #d5d7da;
     width: 180px;
     border: transparent;
     border-radius: 5px;
@@ -125,7 +112,7 @@ a:visited {
 
 .buttonContainer {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     flex-direction: column;
     align-items: center;
     width: 300px;
@@ -137,6 +124,9 @@ a:visited {
     height: auto;
     width: 80px;
     margin: 5px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: transparent;
 }
 
 .loginLink {
@@ -159,38 +149,62 @@ a:visited {
     display: inline-flex;
     flex-direction: row;
     justify-content: space-between;
-    background: #a9eee6;
+    background: #303841;
     width: 100vw;
-    height: 170px;
+    height: 135px;
+    overflow: hidden;
 }
 
 .headerLogo {
     margin-left: 10px;
-    margin-top: 10px;
+    margin-top: 5px;
     height: 140px;
 }
 
 .textHeaderLogo {
     margin: 5px;
-    width: 100px;
-    font-family: "Luckiest Guy", cursive;
+    width: auto;
+    text-align: center;
+    font-family: "Special Elite", cursive;
+    font-weight: bolder;
+    color: #eeeeee;
+    letter-spacing: 2px;
 }
 
-#pawHeaderLogo {
-    height: 100px;
-    width: 100px;
-    margin-left: 10px;
+#hopHeaderLogo {
+    height: 70px;
+    width: 70px;
+    margin-left: 5px;
+    border-radius: 50%;
+    background: #eeeeee;
 }
 
 .headerPicContainer {
     margin-right: 10px;
-
-    width: 130px;
+    width: auto;
     height: auto;
     display: flex;
-    justify-content: center;
-    flex-direction: column;
+    justify-content: flex-end;
+    flex-direction: row;
     align-items: center;
+}
+
+.menuContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.menuHeader {
+    font-family: "Francois One", sans-serif;
+    font-weight: bolder;
+    font-size: 30px;
+    color: #eeeeee;
+    height: auto;
+    margin: 30px;
+
+    letter-spacing: 2px;
 }
 
 .headerPic {
@@ -201,8 +215,14 @@ a:visited {
 }
 
 .headerMessage {
-    font-family: "Luckiest Guy", cursive;
+    font-family: "Special Elite", cursive;
     margin: 5px;
+    width: auto;
+    height: auto;
+    text-align: right;
+    font-weight: bolder;
+    color: #eeeeee;
+    letter-spacing: 2px;
 }
 
 /* /////////////////////////////////////////// Profile  */
@@ -218,105 +238,56 @@ a:visited {
 }
 
 .profileContainer {
-    background: #fefaec;
+    background: #00adb5;
     display: inline-flex;
-    justify-content: center;
+    justify-content: space-around;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
     width: 100vw;
-    height: 75vh;
+    height: auto;
+    min-height: 81vh;
 }
 
 .profilePicContainer {
-    width: 100px;
+    width: 270px;
     min-height: 450px;
     height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #f38181;
+    background: #ff5723;
     border: transparent;
     border-radius: 10px;
-    margin-right: 25px;
+    margin-top: 29px;
 }
 
 .profilePic {
     width: 200px;
     height: auto;
-    margin-top: 15px;
+    margin-top: 0px;
+    margin-bottom: 25px;
+    border-radius: 5px;
 }
 
-.nameProfPic {
-    font-family: "Acme", sans-serif;
+.nameBeerPic {
+    font-family: "Stylish", sans-serif;
     letter-spacing: 1px;
     font-size: 25px;
     margin-top: 15px;
     text-align: center;
 }
 
-/* ////////////////////////////////////// Bio text  profile */
-
-.bioContainer {
-    width: 55vw;
-    margin-left: 50px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-}
-
-.bioInsideContainer {
-    width: 90%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.bioTextContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-#bioTextArea {
-    background: #62577296;
-    font-family: "Roboto Mono", monospace;
+.nameProfPic {
+    font-family: "Special Elite", cursive;
     font-size: 20px;
-    width: 630px;
-    height: 166px;
-    border: transparent;
-    border-radius: 10px;
-    padding: 10px;
+    margin: 10px;
 }
 
-.bioText {
-    background: #625772;
-    color: white;
-    font-family: "Roboto Mono", monospace;
-    border: transparent;
-    border-radius: 10px;
-    padding: 10px;
-    font-size: 20px;
-    width: 100%;
-    height: auto;
-}
-
-#saveBio {
-    width: 100px;
-    font-family: "Noto Sans HK", sans-serif;
+.nameProf {
     font-weight: bolder;
-    height: 25px;
-    background: #f38181;
-    margin: 5px;
-    border-radius: 5px;
-    border: transparent;
-}
-
-.otherProfBio {
-    width: 90%;
+    margin-bottom: 20px;
+    font-size: 25px;
 }
 
 /* /////////////////////////////////////// Search other profiles */
@@ -575,7 +546,7 @@ a:visited {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 200px;
+    width: 100%;
 }
 
 #deleteProfButton {
@@ -583,7 +554,7 @@ a:visited {
     font-family: "Noto Sans HK", sans-serif;
     font-weight: bolder;
     height: 25px;
-    background: #f38181;
+    background: #ff5723;
     margin: 5px;
     border-radius: 5px;
     border: transparent;
@@ -594,18 +565,18 @@ a:visited {
     font-family: "Noto Sans HK", sans-serif;
     font-weight: bolder;
     height: 25px;
-    background: #f38181;
+    background: #ff5723;
     margin: 5px;
     border-radius: 5px;
     border: transparent;
 }
 
-.addFriendButton {
+.addBeerButton {
     width: 106px;
     font-family: "Noto Sans HK", sans-serif;
     font-weight: bolder;
     height: 41px;
-    background: #f38181;
+    background: #f3805dcc;
     margin: 5px;
     margin-top: 31px;
     border-radius: 5px;
@@ -669,25 +640,13 @@ a:visited {
 
 /* ///////////////////////////////////// Friendslist page */
 
-.beerCellarContainer {
-    display: inline-flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    flex-direction: row;
-    width: 40vw;
-}
-
-.friendsListProfContainer {
-    margin-bottom: 40px;
-    margin-left: 20px;
-}
-
-.titleFriendsList {
-    font-family: "Luckiest Guy", cursive;
+.beerCellarTitle {
+    font-family: "Bevan", cursive;
     text-align: center;
     font-size: 40px;
     letter-spacing: 2px;
-    color: #625772;
+    color: #303841;
+    margin: 20px;
 }
 
 .friendsButtonContainer {
@@ -723,4 +682,48 @@ a:visited {
 
 .searchMatches p:hover {
     background: grey;
+}
+
+.beerCellarContainer {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex-direction: row;
+    width: 65vw;
+    height: auto;
+    min-height: 75vh;
+    margin-right: 20px;
+    margin-top: 10px;
+    border: transparent;
+    border-radius: 5px;
+    background: #eeeeee66;
+}
+
+.beerCellar {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.beerContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 33px;
+    margin-top: 0;
+}
+
+.beerPicAndName {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.beerPic {
+    width: 80px;
+    height: auto;
 }

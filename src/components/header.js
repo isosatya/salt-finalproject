@@ -6,30 +6,29 @@ function Header({ imgurl, username }) {
         <div className="headerContainer">
             <div className="headerLogo">
                 <p className="textHeaderLogo" id="paw">
-                    Final
+                    Hoppy
                 </p>
-                <img src="" id="pawHeaderLogo" />
+                <img src="./hop.png" id="hopHeaderLogo" />
                 <p className="textHeaderLogo" id="gang">
-                    Project
+                    Town
                 </p>
             </div>
             <div className="menuContainer">
-                {/* <Link to={`/`}>
+                <Link to={`/`}>
                     <p className="menuHeader">Profile</p>
                 </Link>
-                <Link to={`/friends`}>
-                    <p className="menuHeader">Gang Buddies</p>
-                </Link>
-                <Link to={`/users/`}>
-                    <p className="menuHeader">Search Mobsters</p>
+                <Link to={`/beers`}>
+                    <p className="menuHeader">Search Beers</p>
                 </Link>
                 <Link to={`/chat`}>
-                    <p className="menuHeader">Bark Chat</p>
-                </Link> */}
+                    <p className="menuHeader">Chat</p>
+                </Link>
             </div>
             <div className="headerPicContainer">
-                <p className="headerMessage">Welcome,</p>
-                <p className="headerMessage">{username}</p>
+                <div>
+                    <p className="headerMessage">Welcome,</p>
+                    <p className="headerMessage">{username}</p>
+                </div>
                 <img
                     className="headerPic"
                     src={imgurl ? imgurl : "./uglydog.jpg"}

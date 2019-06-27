@@ -49,7 +49,7 @@ function LikeButton(match) {
         <div>
             {error && <p>Something went wrong!</p>}
             <div>
-                <button className="addFriendButton" onClick={likeBeer}>
+                <button className="addBeerButton" onClick={likeBeer}>
                     {button}
                 </button>
             </div>

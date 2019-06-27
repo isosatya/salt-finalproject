@@ -13,21 +13,38 @@ function FindBeer() {
 
     useEffect(() => {
         (async () => {
-            // console.log("random", random);
-
             if (init == 0) {
-                var x = Math.floor(Math.random() * 10);
+                // var x = Math.floor(Math.random() * 10);
 
-                if ([9, 8, 7].indexOf(x) > -1) {
-                    x = Math.floor(Math.random() * 10);
-                }
+                // if ([9, 8, 7].indexOf(x) > -1) {
+                //     x = Math.floor(Math.random() * 10);
+                // }
 
-                let results = await axios.get(
-                    `https://api.punkapi.com/v2/beers?brewed_after=01_201${x}&per_page=8`
-                );
+                // let results = await axios.get(
+                //     `https://api.punkapi.com/v2/beers?brewed_after=01_201${x}&per_page=8`
+                // );
                 // console.log("response from request", results.data);
-                setRandom(results.data);
-                setInit(1);
+
+                let beersData = [];
+                let promises = [];
+
+                for (let i = 0; i < 8; i++) {
+                    promises.push(
+                        axios.get(`https://api.punkapi.com/v2/beers/random`)
+                    );
+                }
+                Promise.all(promises).then(response => {
+                    for (let i = 0; i < response.length; i++) {
+                        // console.log("response[i].data[0]", response[i].data[0]);
+                        beersData.push(response[i].data[0]);
+                    }
+                    console.log("beersData", beersData);
+                    setRandom(beersData);
+                    console.log("random after setRandom", random);
+                });
+
+                // setRandom(results.data);
+                // setInit(1);
             } else {
                 setError("");
                 let matches = await axios.get(
@@ -69,7 +86,11 @@ function FindBeer() {
                                     <div className="searchProfilePicContainer">
                                         <img
                                             className="profilePic"
-                                            src={beer.image_url}
+                                            src={
+                                                beer.image_url
+                                                    ? beer.image_url
+                                                    : "./beer_bottle.png"
+                                            }
                                             alt={beer.name}
                                         />
                                         <p className="searchNameProfPic">
@@ -96,7 +117,11 @@ function FindBeer() {
                                         <div className="searchProfilePicContainer">
                                             <img
                                                 className="profilePic"
-                                                src={beer.image_url}
+                                                src={
+                                                    beer.image_url
+                                                        ? beer.image_url
+                                                        : "./beer_bottle.png"
+                                                }
                                                 alt={beer.name}
                                             />
                                             <p className="searchNameProfPic">

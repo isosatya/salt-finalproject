@@ -69,6 +69,9 @@ class Login extends Component {
                         Login
                     </button>
                     <p className="errorMsg">{this.state.error}</p>
+                    <Link to="/" className="loginLink">
+                        Back
+                    </Link>
                 </div>
             </form>
         );

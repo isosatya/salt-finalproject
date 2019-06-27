@@ -17,6 +17,13 @@ export default function reducer(state = {}, action) {
         };
     }
 
+    if (action.type === "GET_CITIES") {
+        return {
+            ...state,
+            listCities: action.citiesList
+        };
+    }
+
     if (action.type === "RECENT_CHATS") {
         return {
             ...state,

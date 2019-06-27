@@ -50,43 +50,38 @@ class BeerCellar extends Component {
 
         return (
             <div>
-                <p className="titleFriendsList">Beer Cellar</p>
+                <p className="beerCellarTitle">Beer Cellar</p>
                 {/* {this.state.beersData && <h1>Found some beers</h1>} */}
 
                 {this.state.beersData ? (
-                    <div className="beerCellarContainer">
-                        <h1> Beer state</h1>
+                    <div className="beerCellar">
                         {this.state.beersData.map(beer => (
-                            <div key={beer.id}>
-                                <div className="friendsListProfContainer">
-                                    <Link to={`/beer/${beer.id}`}>
-                                        <div className="profilePicContainer">
-                                            <img
-                                                className="profilePic"
-                                                src={
-                                                    beer.image_url
-                                                        ? beer.image_url
-                                                        : "./uglydog.jpg"
-                                                }
-                                                alt={beer.name}
-                                            />
-                                            <div className="nameProfPic">
-                                                {beer.name}
-                                            </div>
+                            <div key={beer.id} className="beerContainer">
+                                <Link to={`/beer/${beer.id}`}>
+                                    <div className="beerPicAndName">
+                                        <img
+                                            className="beerPic"
+                                            src={
+                                                beer.image_url
+                                                    ? beer.image_url
+                                                    : "./uglydog.jpg"
+                                            }
+                                            alt={beer.name}
+                                        />
+                                        <div className="nameBeerPic">
+                                            {beer.name}
                                         </div>
-                                    </Link>
-                                    <div
-                                        className="friendsButtonContainer"
-                                        onClick={() =>
-                                            setTimeout(() => {
-                                                this.props.dispatch(
-                                                    getCellar()
-                                                );
-                                            }, 300)
-                                        }
-                                    >
-                                        <LikeButton match={beer.id} />
                                     </div>
+                                </Link>
+                                <div
+                                    className="friendsButtonContainer"
+                                    onClick={() =>
+                                        setTimeout(() => {
+                                            this.props.dispatch(getCellar());
+                                        }, 300)
+                                    }
+                                >
+                                    <LikeButton match={beer.id} />
                                 </div>
                             </div>
                         ))}

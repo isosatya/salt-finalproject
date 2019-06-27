@@ -21,14 +21,7 @@ class PrivChatting extends Component {
     }
 
     submitChat() {
-        console.log("log outside of the if at submitchat");
-
         if (this.chattext.current.value != "") {
-            console.log(
-                "this.state.chat inside of submitChat",
-                this.state.chat
-            );
-
             socket.emit("privateChatMessage", this.state.chat);
             this.chattext.current.value = "";
         }

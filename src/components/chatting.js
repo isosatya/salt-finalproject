@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 ///////////////////////// For the Socket events to work
 import { socket } from "./socket";
 import PrivChatting from "./privChatting";
@@ -48,14 +49,35 @@ class Chatting extends Component {
             return null;
         }
 
-        // console.log("this.props at chatting", this.props);
-
         return (
             <div className="chatsContainer">
                 <div
                     className="onlineUsers"
                     // onClick={e => console.log("e.target user", e.target)}
                 >
+                    {this.props.cities && (
+                        <div>
+                            <button
+                                className="addFriendButton"
+                                onClick={() => {
+                                    socket.emit("refreshChats");
+                                }}
+                            >
+                                All cities
+                            </button>
+                            {this.props.cities.map((city, index) => (
+                                <button
+                                    className="addFriendButton"
+                                    key={index}
+                                    onClick={() => {
+                                        socket.emit("chatByCity", city.city);
+                                    }}
+                                >
+                                    {city.city}
+                                </button>
+                            ))}
+                        </div>
+                    )}
                     <h1 className="onlineTitle">Mobsters Online</h1>
                     {this.props.users && (
                         <div>
@@ -63,9 +85,9 @@ class Chatting extends Component {
                                 <div
                                     key={user.id}
                                     className="onlineUser"
-                                    onClick={() =>
-                                        socket.emit("privateChatUser", user.id)
-                                    }
+                                    onClick={() => {
+                                        socket.emit("privateChatUser", user.id);
+                                    }}
                                 >
                                     <div className="dot">
                                         <img
@@ -94,21 +116,17 @@ class Chatting extends Component {
                             {this.props.chats.map(chat => (
                                 <div key={chat.id}>
                                     <div className="chatPicName">
-                                        <img
-                                            className="chatProfilePic"
-                                            src={
-                                                chat.imgurl
-                                                    ? chat.imgurl
-                                                    : "./uglydog.jpg"
-                                            }
-                                            alt={chat.username}
-                                            onClick={() =>
-                                                socket.emit(
-                                                    "privateChatUser",
-                                                    chat.id
-                                                )
-                                            }
-                                        />
+                                        <Link to={`/user/${chat.userid}`}>
+                                            <img
+                                                className="chatProfilePic"
+                                                src={
+                                                    chat.imgurl
+                                                        ? chat.imgurl
+                                                        : "./uglydog.jpg"
+                                                }
+                                                alt={chat.username}
+                                            />
+                                        </Link>
                                         <p className="chatName">
                                             {chat.username}
                                         </p>
@@ -152,7 +170,8 @@ class Chatting extends Component {
 const mapStateToProps = state => {
     return {
         chats: state.chats,
-        users: state.onlineusers
+        users: state.onlineusers,
+        cities: state.listCities
     };
 };
 

@@ -10,6 +10,13 @@ export async function getCellar() {
     };
 }
 
+export async function getCities(list) {
+    return {
+        type: "GET_CITIES",
+        citiesList: list
+    };
+}
+
 export async function userJoinedOrLeft(users) {
     return {
         type: "ONLINE_USERS",

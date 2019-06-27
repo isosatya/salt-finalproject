@@ -187,9 +187,15 @@ app.get("/otheruser/:id", (req, res) => {
 
     db.getUserAndCellar(id)
         .then(results => {
-            // console.log("results for getUserAndCellar", results.rows);
-
-            res.json(results.rows);
+            console.log("results for getUserAndCellar", results.rows);
+            if (!results.rows.length) {
+                db.getUserInfo(id).then(results => {
+                    console.log("results for getUserInfo", results.rows);
+                    res.json(results.rows);
+                });
+            } else {
+                res.json(results.rows);
+            }
         })
         .catch(err => {
             console.log("Error at the getUserAndCellar", err);
@@ -328,6 +334,42 @@ io.on("connection", function(socket) {
         // console.log("onlineUsersInfo query results", results.rows);
         // socket.emit("onlineUsers", results.rows); //--> emit does the job
         io.sockets.emit("userJoinedOrLeft", results.rows);
+    });
+
+    db.getCities().then(results => {
+        io.sockets.emit("citiesList", results.rows);
+    });
+
+    socket.on("chatByCity", city => {
+        db.onlineUsersInfoByCity(Object.values(onlineUsers), city)
+            .then(results => {
+                let filtered = results.rows.filter(
+                    result => result.city == city
+                );
+
+                io.sockets.emit("userJoinedOrLeft", filtered);
+                db.getRecentChatsCity(city).then(results => {
+                    results.rows.map(
+                        item => (item.created_at = dateFormat(item.created_at))
+                    );
+
+                    socket.emit("chatMessages", results.rows.reverse());
+                });
+            })
+            .catch(err => console.log("error at onlineUsersInfoByCity", err));
+    });
+
+    socket.on("refreshChats", () => {
+        db.getRecentChats().then(results => {
+            results.rows.map(
+                item => (item.created_at = dateFormat(item.created_at))
+            );
+            socket.emit("chatMessages", results.rows.reverse());
+
+            db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
+                io.sockets.emit("userJoinedOrLeft", results.rows);
+            });
+        });
     });
 
     db.getRecentChats().then(results => {

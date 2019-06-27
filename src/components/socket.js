@@ -5,6 +5,7 @@ import { onlineUsers } from "./actions";
 import { userJoinedOrLeft } from "./actions";
 import { privateChatMessages } from "./actions";
 import { privateChatMessage } from "./actions";
+import { getCities } from "./actions";
 
 export let socket;
 
@@ -12,6 +13,11 @@ export function initSocket(store) {
     if (!socket) {
         socket = io.connect();
     }
+
+    socket.on("citiesList", list => {
+        // console.log("cities list", list);
+        store.dispatch(getCities(list));
+    });
 
     socket.on("chatMessages", msgs => {
         store.dispatch(chatMessages(msgs));
