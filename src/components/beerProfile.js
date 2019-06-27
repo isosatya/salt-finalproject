@@ -42,63 +42,69 @@ class BeerProfile extends Component {
 
     render() {
         return (
-            <div className="profileContainer">
-                <div className="beerOverview">
-                    <div>
+            <div className="beerProfileContainer">
+                <div className="ingredientsContainer">
+                    <p className="ingredientsTitle">Ingredients</p>
+                    <div className="beerIngredients">
                         <div>
-                            <p>Alcohol %</p>
-                            <p>{this.state.abv}</p>
+                            <h3>Hops</h3>
+                            {this.state.ingredients && (
+                                <div>
+                                    {this.state.ingredients.hops.map(
+                                        (hop, index) => (
+                                            <p key={index}>{hop.name}</p>
+                                        )
+                                    )}
+                                </div>
+                            )}
                         </div>
                         <div>
-                            <p>Bitterness Scale (0 to 100)</p>
-                            <p>{this.state.ibu}</p>
-                        </div>
-                        <div>
-                            <p>pH</p>
-                            <p>{this.state.ph}</p>
+                            <h3>Malts</h3>
+                            {this.state.ingredients && (
+                                <div>
+                                    {this.state.ingredients.malt.map(
+                                        (malt, index) => (
+                                            <p key={index}>{malt.name}</p>
+                                        )
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
+                </div>
+                <div className="beerOverview">
                     <img
-                        className=""
-                        src={this.state.image_url}
+                        src={
+                            this.state.image_url
+                                ? this.state.image_url
+                                : "/beer_bottle.png"
+                        }
                         alt={this.state.name}
                     />
-                    <p>{this.state.tagline}</p>
+                    <p className="tagBeerProf">{this.state.tagline}</p>
                 </div>
+
                 <div className="beerDescription">
-                    <p>{this.state.name}</p>
+                    <p className="nameBeerProfBeer">{this.state.name}</p>
                     <div>
-                        <p>{this.state.description}</p>
-                        <div>
-                            <p>Ingredients</p>
-                            <div>
-                                <p>Hops</p>
-                                {this.state.ingredients && (
-                                    <div>
-                                        {this.state.ingredients.hops.map(
-                                            (hop, index) => (
-                                                <p key={index}>{hop.name}</p>
-                                            )
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                            <div>
-                                <p>Malts</p>
-                                {this.state.ingredients && (
-                                    <div>
-                                        {this.state.ingredients.malt.map(
-                                            (malt, index) => (
-                                                <p key={index}>{malt.name}</p>
-                                            )
-                                        )}
-                                    </div>
-                                )}
-                            </div>
+                        <p className="beerDescText">{this.state.description}</p>
+                    </div>
+                    <div className="beerCharact">
+                        <div className="beerAttibute">
+                            <p>Alcohol %</p>
+                            <p className="beerCharactScale">{this.state.abv}</p>
+                        </div>
+                        <div className="beerAttibute">
+                            <p>Bitterness Scale (0/100)</p>
+                            <p className="beerCharactScale">{this.state.ibu}</p>
+                        </div>
+                        <div className="beerAttibute">
+                            <p>pH</p>
+                            <p className="beerCharactScale">{this.state.ph}</p>
                         </div>
                     </div>
-                    <div>
-                        <p>Food Pairing</p>
+                    <div className="foodPairing">
+                        <p className="tittleFoodPairing">Food Pairing</p>
                         <div>
                             {this.state.food_pairing &&
                                 this.state.food_pairing.map((food, index) => (
@@ -109,14 +115,16 @@ class BeerProfile extends Component {
                                         )}&t=osx&ia=recipes`}
                                         key={index}
                                     >
-                                        <p>{food}</p>
+                                        <p className="foodPairingItem">
+                                            {food}
+                                        </p>
                                     </Link>
                                 ))}
                         </div>
+                        <div className="beerButtonProf">
+                            <LikeButton match={this.props.match.params.id} />
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <LikeButton match={this.props.match.params.id} />
                 </div>
             </div>
         );
