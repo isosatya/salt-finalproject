@@ -187,7 +187,6 @@ app.get("/otheruser/:id", (req, res) => {
 
     db.getUserAndCellar(id)
         .then(results => {
-            console.log("results for getUserAndCellar", results.rows);
             if (!results.rows.length) {
                 db.getUserInfo(id).then(results => {
                     console.log("results for getUserInfo", results.rows);

@@ -51,7 +51,6 @@ class BeerCellar extends Component {
         return (
             <div>
                 <p className="beerCellarTitle">Cellar Collection</p>
-                {/* {this.state.beersData && <h1>Found some beers</h1>} */}
 
                 {this.state.beersData ? (
                     <div className="beerCellar">

@@ -14,19 +14,9 @@ function FindBeer() {
     useEffect(() => {
         (async () => {
             if (init == 0) {
-                // var x = Math.floor(Math.random() * 10);
-
-                // if ([9, 8, 7].indexOf(x) > -1) {
-                //     x = Math.floor(Math.random() * 10);
-                // }
-
-                // let results = await axios.get(
-                //     `https://api.punkapi.com/v2/beers?brewed_after=01_201${x}&per_page=8`
-                // );
-                // console.log("response from request", results.data);
-
                 let beersData = [];
                 let promises = [];
+                console.log("running when init == 0");
 
                 for (let i = 0; i < 8; i++) {
                     promises.push(
@@ -35,18 +25,15 @@ function FindBeer() {
                 }
                 Promise.all(promises).then(response => {
                     for (let i = 0; i < response.length; i++) {
-                        // console.log("response[i].data[0]", response[i].data[0]);
                         beersData.push(response[i].data[0]);
                     }
-                    console.log("beersData", beersData);
-                    setRandom(beersData);
-                    console.log("random after setRandom", random);
-                });
 
-                // setRandom(results.data);
-                // setInit(1);
+                    setRandom(beersData);
+                    setInit(1);
+                });
             } else {
                 setError("");
+                console.log("running when init == 1");
                 let matches = await axios.get(
                     `https://api.punkapi.com/v2/beers?beer_name=${search}&per_page=16`
                 );
@@ -65,9 +52,9 @@ function FindBeer() {
     }, [search]);
 
     return (
-        <div className="findPeopleContainer">
+        <div className="findBeerContainer">
             <div className="searchArea">
-                <label className="searchLabel">Search Users by Name</label>
+                <label className="searchLabel">Search Beers by Name</label>
                 <input
                     onChange={e => setSearch(e.target.value)}
                     defaultValue={search}
@@ -76,47 +63,21 @@ function FindBeer() {
                 {error && <p className="errorMsg">{error}</p>}
             </div>
             <div className="searchResults">
-                {!!results.length && <h1>Your Search Results</h1>}
-                {results &&
-                    results.map(beer => (
-                        <React.Fragment key={beer.id}>
-                            <div>
-                                {/* <Link to={`/beers/${beer.id}`}> */}
+                {!!results.length && (
+                    <h1 className="beerCellarTitle beerCellarTitleSearch">
+                        Your Search Results
+                    </h1>
+                )}
+                <div className="beerCellar">
+                    {results &&
+                        results.map(beer => (
+                            <div key={beer.id} className="beerContainer">
                                 <div>
-                                    <div className="searchProfilePicContainer">
-                                        <img
-                                            className="profilePic"
-                                            src={
-                                                beer.image_url
-                                                    ? beer.image_url
-                                                    : "./beer_bottle.png"
-                                            }
-                                            alt={beer.name}
-                                        />
-                                        <p className="searchNameProfPic">
-                                            {beer.name}
-                                        </p>
-                                        <p className="searchNameProfPic">
-                                            {beer.tagline}
-                                        </p>
-                                    </div>
-                                </div>
-                                {/* </Link> */}
-                            </div>
-                        </React.Fragment>
-                    ))}
-            </div>
-            <div className="searchResults">
-                <h1>Get Randomly Inspired</h1>
-                {random &&
-                    random.map(beer => (
-                        <React.Fragment key={beer.id}>
-                            <div>
-                                <Link to={`/beer/${beer.id}`}>
+                                    {/* <Link to={`/beers/${beer.id}`}> */}
                                     <div>
-                                        <div className="searchProfilePicContainer">
+                                        <div className="beerPicAndName">
                                             <img
-                                                className="profilePic"
+                                                className="beerPic"
                                                 src={
                                                     beer.image_url
                                                         ? beer.image_url
@@ -124,18 +85,57 @@ function FindBeer() {
                                                 }
                                                 alt={beer.name}
                                             />
-                                            <p className="searchNameProfPic">
+                                            <p className="nameBeerPic">
                                                 {beer.name}
                                             </p>
-                                            <p className="searchNameProfPic">
+                                            <p className="tagBeerPic">
                                                 {beer.tagline}
                                             </p>
                                         </div>
                                     </div>
-                                </Link>
+                                    {/* </Link> */}
+                                </div>
                             </div>
-                        </React.Fragment>
-                    ))}
+                        ))}
+                </div>
+            </div>
+            <div className="searchResults">
+                {/* <h1 className="beerCellarTitle">Get Randomly Inspired...</h1> */}
+                {!!random.length && (
+                    <h1 className="beerCellarTitle beerCellarTitleSearch">
+                        Get Randomly Inspired...
+                    </h1>
+                )}
+                <div className="beerCellar">
+                    {random &&
+                        random.map(beer => (
+                            <div key={beer.id} className="beerContainer">
+                                <div>
+                                    <Link to={`/beer/${beer.id}`}>
+                                        <div>
+                                            <div className="beerPicAndName">
+                                                <img
+                                                    className="beerPic"
+                                                    src={
+                                                        beer.image_url
+                                                            ? beer.image_url
+                                                            : "./beer_bottle.png"
+                                                    }
+                                                    alt={beer.name}
+                                                />
+                                                <p className="nameBeerPic">
+                                                    {beer.name}
+                                                </p>
+                                                <p className="tagBeerPic">
+                                                    {beer.tagline}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </div>
+                            </div>
+                        ))}
+                </div>
             </div>
         </div>
     );
