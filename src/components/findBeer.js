@@ -19,9 +19,11 @@ function FindBeer() {
                 console.log("running when init == 0");
 
                 for (let i = 0; i < 8; i++) {
-                    promises.push(
-                        axios.get(`https://api.punkapi.com/v2/beers/random`)
-                    );
+                    setTimeout(() => {
+                        promises.push(
+                            axios.get(`https://api.punkapi.com/v2/beers/random`)
+                        );
+                    }, 100);
                 }
                 Promise.all(promises).then(response => {
                     for (let i = 0; i < response.length; i++) {
