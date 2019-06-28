@@ -45,12 +45,11 @@ class OtherProfile extends Component {
     }
 
     render() {
-        console.log("this.state at render", this.state);
-        console.log("this.props at render", this.props);
+        console.log("this.state", this.state);
 
         return (
             <div className="profileContainer">
-                {Object.keys(this.state).length == 2 && (
+                {Object.keys(this.state).length >= 2 && (
                     <div>
                         <div className="profilePicContainer otherProf">
                             <img
@@ -77,14 +76,14 @@ class OtherProfile extends Component {
                 <div className="beerCellarContainer">
                     <p className="beerCellarTitle">Cellar Collection</p>
                     {this.state.count ? (
-                        <div>
+                        <div className="beerCellar">
                             {this.state.beersData.map(beer => (
-                                <div key={beer.id}>
+                                <div key={beer.id} className="beerContainer">
                                     <div className="friendsListProfContainer">
                                         <Link to={`/beer/${beer.id}`}>
-                                            <div className="profilePicContainer">
+                                            <div className="beerPicAndName">
                                                 <img
-                                                    className="profilePic"
+                                                    className="beerPic"
                                                     src={
                                                         beer.image_url
                                                             ? beer.image_url
@@ -92,14 +91,13 @@ class OtherProfile extends Component {
                                                     }
                                                     alt={beer.name}
                                                 />
-                                                <div className="nameProfPic">
+                                                <div className="nameBeerPic">
                                                     {beer.name}
                                                 </div>
                                             </div>
                                         </Link>
-
-                                        <LikeButton match={beer.id} />
                                     </div>
+                                    <LikeButton match={beer.id} />
                                 </div>
                             ))}
                         </div>

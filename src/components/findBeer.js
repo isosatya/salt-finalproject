@@ -73,27 +73,27 @@ function FindBeer() {
                         results.map(beer => (
                             <div key={beer.id} className="beerContainer">
                                 <div>
-                                    {/* <Link to={`/beers/${beer.id}`}> */}
-                                    <div>
-                                        <div className="beerPicAndName">
-                                            <img
-                                                className="beerPic"
-                                                src={
-                                                    beer.image_url
-                                                        ? beer.image_url
-                                                        : "./beer_bottle.png"
-                                                }
-                                                alt={beer.name}
-                                            />
-                                            <p className="nameBeerPic">
-                                                {beer.name}
-                                            </p>
-                                            <p className="tagBeerPic">
-                                                {beer.tagline}
-                                            </p>
+                                    <Link to={`/beer/${beer.id}`}>
+                                        <div>
+                                            <div className="beerPicAndName">
+                                                <img
+                                                    className="beerPic"
+                                                    src={
+                                                        beer.image_url
+                                                            ? beer.image_url
+                                                            : "./beer_bottle.png"
+                                                    }
+                                                    alt={beer.name}
+                                                />
+                                                <p className="nameBeerPic">
+                                                    {beer.name}
+                                                </p>
+                                                <p className="tagBeerPic">
+                                                    {beer.tagline}
+                                                </p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    {/* </Link> */}
+                                    </Link>
                                 </div>
                             </div>
                         ))}

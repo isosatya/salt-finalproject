@@ -98,7 +98,6 @@ class Registration extends Component {
                         name="username"
                         required="required"
                         className="formField"
-                        // value={this.state.username}
                         onChange={this.handleChange}
                     />
                 </div>
@@ -111,7 +110,6 @@ class Registration extends Component {
                         max="99"
                         required="required"
                         className="formField"
-                        // value={this.state.age}
                         onChange={this.handleChange}
                     />
                 </div>
@@ -140,7 +138,6 @@ class Registration extends Component {
                                             matches: null,
                                             city: null
                                         });
-                                        // console.log("this.state", this.state);
                                     }}
                                 >
                                     {match}
@@ -157,18 +154,16 @@ class Registration extends Component {
                         name="email"
                         required="required"
                         className="formField"
-                        // value={this.state.email}
                         onChange={this.handleChange}
                     />
                 </div>
                 <div className="formElement">
                     <label className="label">Password</label>
                     <input
-                        // type="password"
+                        type="password"
                         name="password"
                         required="required"
                         className="formField"
-                        // value={this.state.password}
                         onChange={this.handleChange}
                     />
                 </div>
