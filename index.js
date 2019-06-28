@@ -301,7 +301,7 @@ app.get("*", function(req, res) {
 
 // We change "app.listen" with "server.listen" so we can use the Socket functionality
 // it's server, not app, that does the listening
-server.listen(8080, function() {
+server.listen(process.env.PORT || 8080, function() {
     console.log("I'm listening.");
 });
 
