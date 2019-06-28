@@ -19,11 +19,9 @@ function FindBeer() {
                 console.log("running when init == 0");
 
                 for (let i = 0; i < 8; i++) {
-                    setTimeout(() => {
-                        promises.push(
-                            axios.get(`https://api.punkapi.com/v2/beers/random`)
-                        );
-                    }, 100);
+                    promises.push(
+                        axios.get(`https://api.punkapi.com/v2/beers/random`)
+                    );
                 }
                 Promise.all(promises).then(response => {
                     for (let i = 0; i < response.length; i++) {
@@ -52,6 +50,7 @@ function FindBeer() {
             }
         })();
     }, [search]);
+    console.log("logging random", random);
 
     return (
         <div className="findBeerContainer">
