@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./axios";
 
 export async function getCellar() {
     const { data } = await axios.get("/beers_list");

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import { HashRouter, Route } from "react-router-dom";
-import axios from "axios";
+import axios from "./axios";
 import {
     Transition,
     CSSTransition,

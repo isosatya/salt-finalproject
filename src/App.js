@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Link } from "react-router-dom";
-import axios from "axios";
+import axios from "./components/axios";
 import Profile from "./components/profile";
 import BeerProfile from "./components/beerProfile";
 import Uploader from "./components/uploader";

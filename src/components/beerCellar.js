@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Link } from "react-router-dom";
 import { connect } from "react-redux";
-import axios from "axios";
+import axios from "./axios";
 import { getCellar } from "./actions";
 import LikeButton from "./likeButton";
 import { acceptFriendReq } from "./actions";

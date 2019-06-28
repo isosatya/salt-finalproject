@@ -5,14 +5,16 @@ const app = express();
 const compression = require("compression");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+var cookieSession = require("cookie-session");
+////// for the csrf token
+const csurf = require("csurf");
 const db = require("./utils/db");
 const bc = require("./utils/bc"); // BECRYPT FOR HASHING AND CHECKING PASSWORDS
-var cookieSession = require("cookie-session");
-
 ////////////////////// SETTINGS FOR SOCKET (CHAT)
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
-    origins: "localhost:8080 127.0.0.1:8080/"
+    origins:
+        "localhost:8080 127.0.0.1:8080/ || https://salt-finalproject.herokuapp.com/*"
 });
 ///////////////////////////
 
@@ -57,7 +59,12 @@ io.use(function(socket, next) {
     cookieSessionMiddleware(socket.request, socket.request.res, next);
 });
 
-////////////////////////////////
+///////////////////////// for the csrf token
+app.use(csurf());
+app.use(function(req, res, next) {
+    res.cookie("mytoken", req.csrfToken());
+    next();
+});
 
 app.use(express.static(__dirname + "/public"));
 

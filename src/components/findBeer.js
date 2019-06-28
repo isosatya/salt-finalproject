@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "./axios";
 import ProfilePic from "./profilePic";
 import { Link } from "react-router-dom";
 
