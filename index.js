@@ -14,7 +14,7 @@ const bc = require("./utils/bc"); // BECRYPT FOR HASHING AND CHECKING PASSWORDS
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
     origins:
-        "localhost:8080 127.0.0.1:8080/ || https://salt-finalproject.herokuapp.com/*"
+        "localhost:8080 127.0.0.1:8080/ https://salt-finalproject.herokuapp.com/*"
 });
 ///////////////////////////
 
