@@ -87,7 +87,7 @@ class OtherProfile extends Component {
                                                     src={
                                                         beer.image_url
                                                             ? beer.image_url
-                                                            : "./uglydog.jpg"
+                                                            : "/beer_bottle.png"
                                                     }
                                                     alt={beer.name}
                                                 />
