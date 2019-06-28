@@ -35,7 +35,7 @@ class PrivChatting extends Component {
 
             return (
                 <div>
-                    <p className="noChatMsg">Private Barks</p>
+                    <p className="noChatMsg">Private Chats</p>
                 </div>
             );
         }
@@ -47,7 +47,7 @@ class PrivChatting extends Component {
                 {this.props.priv_chats && (
                     <div>
                         {this.props.priv_chats.map(chat => (
-                            <div key={chat.id}>
+                            <div key={chat.id} className="privChatCont">
                                 <div className="chatPicName">
                                     <img
                                         className="chatProfilePic"
@@ -72,7 +72,7 @@ class PrivChatting extends Component {
                 )}
                 {this.props.priv_chats.length == 0 && (
                     <div>
-                        <p className="noChatMsg">No Barks Yet!!</p>
+                        <p className="noChatMsg">No Chats Yet...</p>
                     </div>
                 )}
 

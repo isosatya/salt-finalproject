@@ -51,14 +51,18 @@ class Chatting extends Component {
 
         return (
             <div className="chatsContainer">
+                <div className="privChats" ref={this.chatwindow2}>
+                    <PrivChatting />
+                </div>
                 <div
                     className="onlineUsers"
                     // onClick={e => console.log("e.target user", e.target)}
                 >
+                    <h1 className="onlineTitle">Online Hopsters</h1>
                     {this.props.cities && (
-                        <div>
+                        <div className="chatChannelsButtons">
                             <button
-                                className="addFriendButton"
+                                className="chatCityButton"
                                 onClick={() => {
                                     socket.emit("refreshChats");
                                 }}
@@ -67,7 +71,7 @@ class Chatting extends Component {
                             </button>
                             {this.props.cities.map((city, index) => (
                                 <button
-                                    className="addFriendButton"
+                                    className="chatCityButton"
                                     key={index}
                                     onClick={() => {
                                         socket.emit("chatByCity", city.city);
@@ -78,7 +82,6 @@ class Chatting extends Component {
                             ))}
                         </div>
                     )}
-                    <h1 className="onlineTitle">Mobsters Online</h1>
                     {this.props.users && (
                         <div>
                             {this.props.users.map(user => (
@@ -158,9 +161,6 @@ class Chatting extends Component {
                             </button>
                         </div>
                     </div>
-                </div>
-                <div className="privChats" ref={this.chatwindow2}>
-                    <PrivChatting />
                 </div>
             </div>
         );
