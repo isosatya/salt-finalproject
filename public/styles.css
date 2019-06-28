@@ -661,8 +661,7 @@ a:visited {
 }
 
 .beerCellarTitleSearch {
-    margin: 30px;
-    margin-top: 0px;
+    margin: 5px;
 }
 
 .friendsButtonContainer {
@@ -813,7 +812,7 @@ a:visited {
     border: transparent;
     border-radius: 5px;
     background: #eeeeeea1;
-    width: 220px;
+    width: 231px;
     height: auto;
     min-height: 450px;
     font-family: "Satisfy", cursive;
@@ -899,12 +898,20 @@ a:visited {
     justify-content: center;
     align-items: center;
     flex-direction: row;
+    width: 92%;
+}
+
+.foodPairingInside {
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
     width: 100%;
 }
 
 .tittleFoodPairing {
     font-family: "Gloria Hallelujah", cursive;
-    font-size: 20px;
+    font-size: 23px;
     margin: 0;
     margin-right: 30px;
     letter-spacing: 1px;
@@ -922,6 +929,7 @@ a:visited {
     background: #eeeeee;
     border: transparent;
     border-radius: 5px;
+    width: 89%;
 }
 
 .beerButtonProf {

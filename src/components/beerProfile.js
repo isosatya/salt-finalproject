@@ -79,6 +79,7 @@ class BeerProfile extends Component {
                                 ? this.state.image_url
                                 : "/beer_bottle.png"
                         }
+                        className="beerProfPic"
                         alt={this.state.name}
                     />
                     <p className="tagBeerProf">{this.state.tagline}</p>
@@ -104,22 +105,26 @@ class BeerProfile extends Component {
                         </div>
                     </div>
                     <div className="foodPairing">
-                        <p className="tittleFoodPairing">Food Pairing</p>
-                        <div>
-                            {this.state.food_pairing &&
-                                this.state.food_pairing.map((food, index) => (
-                                    <Link
-                                        to={`https://duckduckgo.com/?q=${food.replace(
-                                            / /g,
-                                            "+"
-                                        )}&t=osx&ia=recipes`}
-                                        key={index}
-                                    >
-                                        <p className="foodPairingItem">
-                                            {food}
-                                        </p>
-                                    </Link>
-                                ))}
+                        <div className="foodPairingInside">
+                            <p className="tittleFoodPairing">Food Pairing</p>
+                            <div>
+                                {this.state.food_pairing &&
+                                    this.state.food_pairing.map(
+                                        (food, index) => (
+                                            <Link
+                                                to={`https://duckduckgo.com/?q=${food.replace(
+                                                    / /g,
+                                                    "+"
+                                                )}&t=osx&ia=recipes`}
+                                                key={index}
+                                            >
+                                                <p className="foodPairingItem">
+                                                    {food}
+                                                </p>
+                                            </Link>
+                                        )
+                                    )}
+                            </div>
                         </div>
                         <div className="beerButtonProf">
                             <LikeButton match={this.props.match.params.id} />
