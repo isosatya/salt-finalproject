@@ -107,21 +107,22 @@ class BeerProfile extends Component {
                     <div className="foodPairing">
                         <div className="foodPairingInside">
                             <p className="tittleFoodPairing">Food Pairing</p>
-                            <div>
+                            <div className="foodPairingItemContainer">
                                 {this.state.food_pairing &&
                                     this.state.food_pairing.map(
                                         (food, index) => (
-                                            <Link
-                                                to={`https://duckduckgo.com/?q=${food.replace(
+                                            <a
+                                                href={`https://duckduckgo.com/?q=${food.replace(
                                                     / /g,
                                                     "+"
                                                 )}&t=osx&ia=recipes`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
                                                 key={index}
+                                                className="foodPairingItem"
                                             >
-                                                <p className="foodPairingItem">
-                                                    {food}
-                                                </p>
-                                            </Link>
+                                                {food}
+                                            </a>
                                         )
                                     )}
                             </div>

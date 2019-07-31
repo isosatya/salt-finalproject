@@ -950,11 +950,16 @@ a:visited {
     color: #eeeeee;
 }
 
+.foodPairingItemContainer {
+    display: inline-flex;
+    flex-direction: column;
+}
+
 .foodPairingItem {
     color: #00adb5;
     font-family: "Gloria Hallelujah", cursive;
     font-size: 15px;
-    margin: 10px;
+    margin: 5px;
     padding-left: 10px;
     padding-right: 10px;
     background: #eeeeee;
