@@ -1,12 +1,9 @@
 const spicedPg = require("spiced-pg");
-///////////////// this communicates with the local or the web sql database and has to be
-///////////////// specified for each project
 const dbUrl =
     process.env.DATABASE_URL ||
     `postgres:postgres:postgres@localhost:5432/salt-finalproject`;
 var db = spicedPg(dbUrl);
 
-/////////////////////////////////////////////////////////////////////////
 
 module.exports.addUsers = function addUsers(
     username,
@@ -169,17 +166,6 @@ module.exports.onlineUsersInfoByCity = function onlineUsersInfoByCity(
     );
 };
 
-// module.exports.onlineUsersInfoByCity = function onlineUsersInfoByCity(
-//     arrayOfIds,
-//     city
-// ) {
-//     const query = `SELECT id, username, age, city, imgUrl
-//                 FROM users
-//                 WHERE id = ANY($1)
-//                 AND city = $2
-//                 `;
-//     return db.query(query, [arrayOfIds], [city]);
-// };
 
 module.exports.addChatMsg = function addChatMsg(sender_id, text) {
     return db.query(
@@ -275,7 +261,7 @@ module.exports.getPicsUserDatabase = function getPicsUserDatabase(user_id) {
     );
 };
 
-module.exports.deletePicsUserDatabase = function deltePicsUserDatabase(
+module.exports.deletePicsUserDatabase = function deletePicsUserDatabase(
     user_id
 ) {
     return db.query(

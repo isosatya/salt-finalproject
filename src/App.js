@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import axios from "./components/axios";
 import Profile from "./components/profile";
 import BeerProfile from "./components/beerProfile";
@@ -7,12 +7,9 @@ import Uploader from "./components/uploader";
 import FindBeer from "./components/findBeer";
 import Header from "./components/header";
 import OtherProfile from "./components/otherProfile";
-import FriendsList from "./components/beerCellar";
 import Chatting from "./components/chatting";
 
-///////////// this one is for using HOOKS
-// import { useState, useEffect } from "react";
-
+// Main application component that handles routing and user state
 class App extends Component {
     constructor(props) {
         super(props);
@@ -24,33 +21,33 @@ class App extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    // Fetch user data when component mounts
     componentDidMount() {
         axios.get("/user").then(results => {
             this.setState(results.data[0]);
         });
     }
 
+    // Toggle the profile picture uploader modal
     toggleUploader() {
         this.state.uploader
             ? this.setState({ uploader: false })
             : this.setState({ uploader: true });
     }
 
+    // Handle file selection for profile picture upload
     handleFileChange(e) {
-        // assigning the file that was selected to this.file.state
         this.setState({ file: e.target.files[0] });
     }
 
+    // Upload selected profile picture to server
     uploadPic() {
-        // create the FormData object
         var formData = new FormData();
-        // assign the file in this.state to the Form
         formData.append("file", this.state.file);
-        // posting the new file to the backend
+        
         axios
             .post("/upload", formData)
             .then(resp => {
-                console.log("picture uploaded", resp.data);
                 this.setState({
                     imgurl: resp.data,
                     file: null,
@@ -58,14 +55,15 @@ class App extends Component {
                 });
             })
             .catch(function(err) {
-                console.log("Error when uploading picture", err);
             });
     }
 
+    // Handle bio text input changes
     handleChange(e) {
         this.setState({ bio: e.target.value });
     }
 
+    // Submit bio update to server
     handleSubmit(e) {
         e.preventDefault();
         axios.post("/updatebio", { bio: this.state.bio });
@@ -92,9 +90,9 @@ class App extends Component {
                                             city={this.state.city}
                                             imgurl={this.state.imgurl}
                                             created_at={this.state.created_at}
-                                            toggle={this.toggleUploader}
-                                            handleChange={this.handleChange}
-                                            handleSubmit={this.handleSubmit}
+                                            onToggleUploader={this.toggleUploader}
+                                            onChange={this.handleChange}
+                                            onSubmit={this.handleSubmit}
                                         />
                                     )}
                                 />
@@ -130,9 +128,9 @@ class App extends Component {
                         </BrowserRouter>
                         {this.state.uploader && (
                             <Uploader
-                                toggle={this.toggleUploader}
-                                upload={this.uploadPic}
-                                file={this.handleFileChange}
+                                onToggle={this.toggleUploader}
+                                onUpload={this.uploadPic}
+                                onFileChange={this.handleFileChange}
                             />
                         )}
                     </div>

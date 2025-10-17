@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-///////////////////////// For the Socket events to work
 import { socket } from "./socket";
 import PrivChatting from "./privChatting";
+import { DEFAULT_PROFILE_IMAGE, DEFAULT_HOP_IMAGE } from "../constants";
 
-//////////////////////////////////
-
+// Main chat component with public and private messaging functionality
 class Chatting extends Component {
     constructor() {
         super();
@@ -17,6 +16,7 @@ class Chatting extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.submitChat = this.submitChat.bind(this);
     }
+    // Auto-scroll chat to bottom on mount
     componentDidMount() {
         if (this.chatwindow.current) {
             this.chatwindow.current.scrollTop =
@@ -25,6 +25,7 @@ class Chatting extends Component {
         }
     }
 
+    // Auto-scroll chat to bottom when new messages arrive
     componentDidUpdate() {
         if (this.chatwindow.current) {
             this.chatwindow.current.scrollTop =
@@ -33,10 +34,12 @@ class Chatting extends Component {
         }
     }
 
+    // Handle chat input changes
     handleChange(e) {
         this.setState({ chat: e.target.value });
     }
 
+    // Send chat message via socket
     submitChat() {
         if (this.chattext.current.value != "") {
             socket.emit("chatMessage", this.state.chat);
@@ -56,7 +59,6 @@ class Chatting extends Component {
                 </div>
                 <div
                     className="onlineUsers"
-                    // onClick={e => console.log("e.target user", e.target)}
                 >
                     <h1 className="onlineTitle">Online Hopsters</h1>
                     {this.props.cities && (
@@ -98,7 +100,7 @@ class Chatting extends Component {
                                             src={
                                                 user.imgurl
                                                     ? user.imgurl
-                                                    : "./hop.png"
+                                                    : DEFAULT_HOP_IMAGE
                                             }
                                             alt={user.username}
                                         />
@@ -125,7 +127,7 @@ class Chatting extends Component {
                                                 src={
                                                     chat.imgurl
                                                         ? chat.imgurl
-                                                        : "./uglydog.jpg"
+                                                        : DEFAULT_PROFILE_IMAGE
                                                 }
                                                 alt={chat.username}
                                             />

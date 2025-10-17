@@ -1,9 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import axios from "./axios";
-import ProfilePic from "./profilePic";
 import { Link } from "react-router-dom";
+import { PUNK_API_BASE_URL, DEFAULT_BEER_IMAGE, RANDOM_BEERS_COUNT, SEARCH_RESULTS_PER_PAGE } from "../constants";
 
+// Component for searching and discovering beers using the Punk API
 function FindBeer() {
     const [search, setSearch] = useState("");
     const [results, setResults] = useState([]);
@@ -11,16 +12,17 @@ function FindBeer() {
     const [error, setError] = useState("");
     const [init, setInit] = useState(0);
 
+    // Handle beer search and random beer loading
     useEffect(() => {
         (async () => {
+            // Load random beers on initial mount
             if (init == 0) {
                 let beersData = [];
                 let promises = [];
-                console.log("running when init == 0");
 
-                for (let i = 0; i < 8; i++) {
+                for (let i = 0; i < RANDOM_BEERS_COUNT; i++) {
                     promises.push(
-                        axios.get(`https://api.punkapi.com/v2/beers/random`)
+                        axios.get(`${PUNK_API_BASE_URL}/random`)
                     );
                 }
                 Promise.all(promises).then(response => {
@@ -32,12 +34,11 @@ function FindBeer() {
                     setInit(1);
                 });
             } else {
+                // Search for beers by name
                 setError("");
-                console.log("running when init == 1");
                 let matches = await axios.get(
-                    `https://api.punkapi.com/v2/beers?beer_name=${search}&per_page=16`
+                    `${PUNK_API_BASE_URL}?beer_name=${search}&per_page=${SEARCH_RESULTS_PER_PAGE}`
                 );
-                // console.log("matches.data", matches.data);
 
                 if (!matches.data.length) {
                     setError(
@@ -50,7 +51,6 @@ function FindBeer() {
             }
         })();
     }, [search]);
-    console.log("logging random", random);
 
     return (
         <div className="findBeerContainer">
@@ -82,7 +82,7 @@ function FindBeer() {
                                                     src={
                                                         beer.image_url
                                                             ? beer.image_url
-                                                            : "./beer_bottle.png"
+                                                            : DEFAULT_BEER_IMAGE
                                                     }
                                                     alt={beer.name}
                                                 />
@@ -120,7 +120,7 @@ function FindBeer() {
                                                     src={
                                                         beer.image_url
                                                             ? beer.image_url
-                                                            : "./beer_bottle.png"
+                                                            : DEFAULT_BEER_IMAGE
                                                     }
                                                     alt={beer.name}
                                                 />

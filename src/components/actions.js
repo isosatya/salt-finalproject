@@ -1,51 +1,56 @@
 import axios from "./axios";
 
-export async function getCellar() {
-    const { data } = await axios.get("/beers_list");
-    // console.log("beers list query results", data);
+// Redux action creators for managing application state
 
+// Triggers fetching user's beer cellar from the database
+export function getCellar() {
     return {
-        type: "GET_BEERS",
-        beersList: data
+        type: "GET_BEERS"
     };
 }
 
-export async function getCities(list) {
+// Updates the list of available cities for chat filtering
+export function getCities(list) {
     return {
         type: "GET_CITIES",
         citiesList: list
     };
 }
 
-export async function userJoinedOrLeft(users) {
+// Updates the list of currently online users
+export function userJoinedOrLeft(users) {
     return {
         type: "ONLINE_USERS",
         onlineusers: users
     };
 }
 
-export async function chatMessages(msgs) {
+// Loads recent chat messages into the store
+export function chatMessages(msgs) {
     return {
         type: "RECENT_CHATS",
         chats: msgs
     };
 }
 
-export async function chatMessage(msg) {
+// Adds a new chat message to the store
+export function chatMessage(msg) {
     return {
         type: "NEW_CHAT",
         chat: msg
     };
 }
 
-export async function privateChatMessages(priv_msgs) {
+// Loads recent private chat messages
+export function privateChatMessages(priv_msgs) {
     return {
         type: "RECENT_PRIV_CHATS",
         priv_chats: priv_msgs
     };
 }
 
-export async function privateChatMessage(priv_msg) {
+// Adds a new private chat message to the store
+export function privateChatMessage(priv_msg) {
     return {
         type: "NEW_PRIV_CHAT",
         priv_chat: priv_msg

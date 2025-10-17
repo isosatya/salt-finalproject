@@ -9,7 +9,7 @@ class Uploader extends Component {
         return (
             <div className="overlay">
                 <div className="boxUploader">
-                    <p id="closeUploader" onClick={this.props.toggle}>
+                    <p id="closeUploader" onClick={this.props.onToggle}>
                         X
                     </p>
                     <h3>Fancy changing your profile picture?</h3>
@@ -17,9 +17,9 @@ class Uploader extends Component {
                         type="file"
                         name="file"
                         accept="image/*"
-                        onChange={this.props.file}
+                        onChange={this.props.onFileChange}
                     />
-                    <button onClick={this.props.upload}>Upload</button>
+                    <button onClick={this.props.onUpload}>Upload</button>
                 </div>
             </div>
         );
