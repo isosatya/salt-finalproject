@@ -54,10 +54,7 @@ class Chatting extends Component {
                 <div className="privChats" ref={this.chatwindow2}>
                     <PrivChatting />
                 </div>
-                <div
-                    className="onlineUsers"
-                    // onClick={e => console.log("e.target user", e.target)}
-                >
+                <div className="onlineUsers">
                     <h1 className="onlineTitle">Online Hopsters</h1>
                     {this.props.cities && (
                         <div className="chatChannelsButtons">

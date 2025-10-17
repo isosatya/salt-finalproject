@@ -1,140 +1,104 @@
-import React, { Component } from "react";
-import axios from "./axios";
+import React from "react";
 import { Link } from "react-router-dom";
 import LikeButton from "./likeButton";
-// import ProfilePic from "./profilePic";
+import useBeerData from "../hooks/useBeerData";
+import ImageWithFallback from "./shared/ImageWithFallback";
 
-class BeerProfile extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
+function BeerProfile({ match }) {
+    const { beer, loading, error } = useBeerData(match.params.id);
+
+    if (loading) {
+        return <div className="beerProfileContainer">Loading...</div>;
     }
 
-    componentDidMount() {
-        let beerId = this.props.match.params.id;
-        console.log("beerId", beerId);
-
-        axios.get(`https://api.punkapi.com/v2/beers/${beerId}`).then(resp => {
-            let data = resp.data[0];
-
-            // --------------------Filtering repeated ingredients
-            let arrayHops = data.ingredients.hops;
-            var obj = {};
-            for (var i = 0, len = arrayHops.length; i < len; i++)
-                obj[arrayHops[i]["name"]] = arrayHops[i];
-            arrayHops = new Array();
-            for (var key in obj) arrayHops.push(obj[key]);
-
-            let arrayMalts = data.ingredients.malt;
-            var obj2 = {};
-            for (i = 0, len = arrayMalts.length; i < len; i++)
-                obj2[arrayMalts[i]["name"]] = arrayMalts[i];
-            arrayMalts = new Array();
-            for (key in obj2) arrayMalts.push(obj2[key]);
-            // ---------------------------------------------
-
-            data.ingredients.hops = arrayHops;
-            data.ingredients.malt = arrayMalts;
-
-            this.setState(data);
-        });
+    if (error || !beer) {
+        return <div className="beerProfileContainer">Error: {error || "Beer not found"}</div>;
     }
 
-    render() {
-        return (
-            <div className="beerProfileContainer">
-                <div className="ingredientsContainer">
-                    <p className="ingredientsTitle">Ingredients</p>
-                    <div className="beerIngredients">
-                        <div>
-                            <h3>Hops</h3>
-                            {this.state.ingredients && (
-                                <div>
-                                    {this.state.ingredients.hops.map(
-                                        (hop, index) => (
-                                            <p key={index}>{hop.name}</p>
-                                        )
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                        <div>
-                            <h3>Malts</h3>
-                            {this.state.ingredients && (
-                                <div>
-                                    {this.state.ingredients.malt.map(
-                                        (malt, index) => (
-                                            <p key={index}>{malt.name}</p>
-                                        )
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-                <div className="beerOverview">
-                    <img
-                        src={
-                            this.state.image_url
-                                ? this.state.image_url
-                                : "/beer_bottle.png"
-                        }
-                        className="beerProfPic"
-                        alt={this.state.name}
-                    />
-                    <p className="tagBeerProf">{this.state.tagline}</p>
-                </div>
-
-                <div className="beerDescription">
-                    <p className="nameBeerProfBeer">{this.state.name}</p>
+    return (
+        <div className="beerProfileContainer">
+            <div className="ingredientsContainer">
+                <p className="ingredientsTitle">Ingredients</p>
+                <div className="beerIngredients">
                     <div>
-                        <p className="beerDescText">{this.state.description}</p>
-                    </div>
-                    <div className="beerCharact">
-                        <div className="beerAttibute">
-                            <p>Alcohol %</p>
-                            <p className="beerCharactScale">{this.state.abv}</p>
-                        </div>
-                        <div className="beerAttibute">
-                            <p>Bitterness Scale (0/100)</p>
-                            <p className="beerCharactScale">{this.state.ibu}</p>
-                        </div>
-                        <div className="beerAttibute">
-                            <p>pH</p>
-                            <p className="beerCharactScale">{this.state.ph}</p>
-                        </div>
-                    </div>
-                    <div className="foodPairing">
-                        <div className="foodPairingInside">
-                            <p className="tittleFoodPairing">Food Pairing</p>
-                            <div className="foodPairingItemContainer">
-                                {this.state.food_pairing &&
-                                    this.state.food_pairing.map(
-                                        (food, index) => (
-                                            <a
-                                                href={`https://duckduckgo.com/?q=${food.replace(
-                                                    / /g,
-                                                    "+"
-                                                )}&t=osx&ia=recipes`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                key={index}
-                                                className="foodPairingItem"
-                                            >
-                                                {food}
-                                            </a>
-                                        )
-                                    )}
+                        <h3>Hops</h3>
+                        {beer.ingredients && beer.ingredients.hops && (
+                            <div>
+                                {beer.ingredients.hops.map((hop, index) => (
+                                    <p key={index}>{hop.name}</p>
+                                ))}
                             </div>
-                        </div>
-                        <div className="beerButtonProf">
-                            <LikeButton match={this.props.match.params.id} />
-                        </div>
+                        )}
+                    </div>
+                    <div>
+                        <h3>Malts</h3>
+                        {beer.ingredients && beer.ingredients.malt && (
+                            <div>
+                                {beer.ingredients.malt.map((malt, index) => (
+                                    <p key={index}>{malt.name}</p>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
-        );
-    }
+            <div className="beerOverview">
+                <ImageWithFallback
+                    src={beer.image_url}
+                    fallback="/beer_bottle.png"
+                    className="beerProfPic"
+                    alt={beer.name}
+                />
+                <p className="tagBeerProf">{beer.tagline}</p>
+            </div>
+
+            <div className="beerDescription">
+                <p className="nameBeerProfBeer">{beer.name}</p>
+                <div>
+                    <p className="beerDescText">{beer.description}</p>
+                </div>
+                <div className="beerCharact">
+                    <div className="beerAttibute">
+                        <p>Alcohol %</p>
+                        <p className="beerCharactScale">{beer.abv}</p>
+                    </div>
+                    <div className="beerAttibute">
+                        <p>Bitterness Scale (0/100)</p>
+                        <p className="beerCharactScale">{beer.ibu}</p>
+                    </div>
+                    <div className="beerAttibute">
+                        <p>pH</p>
+                        <p className="beerCharactScale">{beer.ph}</p>
+                    </div>
+                </div>
+                <div className="foodPairing">
+                    <div className="foodPairingInside">
+                        <p className="tittleFoodPairing">Food Pairing</p>
+                        <div className="foodPairingItemContainer">
+                            {beer.food_pairing &&
+                                beer.food_pairing.map((food, index) => (
+                                    <a
+                                        href={`https://duckduckgo.com/?q=${food.replace(
+                                            / /g,
+                                            "+"
+                                        )}&t=osx&ia=recipes`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        key={index}
+                                        className="foodPairingItem"
+                                    >
+                                        {food}
+                                    </a>
+                                ))}
+                        </div>
+                    </div>
+                    <div className="beerButtonProf">
+                        <LikeButton match={match.params.id} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default BeerProfile;

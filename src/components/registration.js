@@ -26,7 +26,6 @@ class Registration extends Component {
 
         if (this.state.city) {
             let results = [];
-            console.log("doing the search");
 
             axios
                 .get(
@@ -47,7 +46,7 @@ class Registration extends Component {
                     }
                 })
                 .catch(err => {
-                    console.log("error at the search get route", err);
+                    console.error("City search error:", err);
                 });
         }
     }
@@ -58,10 +57,7 @@ class Registration extends Component {
     }
 
     handleSubmit(e) {
-        // no submission needed because axios does the job instead
         e.preventDefault();
-        console.log("this.state", this.state);
-        console.log("this.cityRef.current.value", this.cityRef.current.value);
 
         axios
             .post("/register", {
@@ -85,7 +81,7 @@ class Registration extends Component {
                 }
             })
             .catch(function(err) {
-                console.log("Error for post route /register", err);
+                console.error("Registration error:", err);
             });
     }
 

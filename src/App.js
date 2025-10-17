@@ -50,7 +50,6 @@ class App extends Component {
         axios
             .post("/upload", formData)
             .then(resp => {
-                console.log("picture uploaded", resp.data);
                 this.setState({
                     imgurl: resp.data,
                     file: null,
@@ -58,7 +57,7 @@ class App extends Component {
                 });
             })
             .catch(function(err) {
-                console.log("Error when uploading picture", err);
+                console.error("Error uploading picture:", err);
             });
     }
 

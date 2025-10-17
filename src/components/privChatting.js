@@ -17,7 +17,6 @@ class PrivChatting extends Component {
 
     handleChange(e) {
         this.setState({ chat: e.target.value });
-        // console.log("this.state.chat", this.state.chat);
     }
 
     submitChat() {
@@ -28,19 +27,13 @@ class PrivChatting extends Component {
     }
 
     render() {
-        // console.log("this.props at render", this.props.priv_chats);
-
         if (!this.props.priv_chats) {
-            // console.log("private this.props.priv_chats is null");
-
             return (
                 <div>
                     <p className="noChatMsg">Private Chats</p>
                 </div>
             );
         }
-
-        // console.log("this.props at private chatting", this.props);
 
         return (
             <div className="privChatWindow">

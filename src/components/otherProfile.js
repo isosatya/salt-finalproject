@@ -1,109 +1,116 @@
 import React, { Component } from "react";
-import axios from "axios";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import axios from "./axios";
 import LikeButton from "./likeButton";
+import BeerGrid from "./shared/BeerGrid";
+import ImageWithFallback from "./shared/ImageWithFallback";
 
 class OtherProfile extends Component {
     constructor(props) {
         super(props);
-        this.state = { count: 0 };
+        this.state = { 
+            userData: null,
+            beersData: [],
+            loading: true,
+            error: null
+        };
     }
 
     componentDidMount() {
-        axios.get("/otheruser/" + this.props.match.params.id).then(resp => {
-            console.log("resp.dat at user search", resp.data);
-
-            this.setState(resp.data);
-        });
+        this.fetchUserData();
     }
 
-    componentDidUpdate(prevprops) {
-        let stateArray = Object.values(this.state);
+    componentDidUpdate(prevProps) {
+        if (prevProps.match.params.id !== this.props.match.params.id) {
+            this.fetchUserData();
+        }
+    }
 
-        // use this condition so it componentDidUpdate doesnt get into an infinte loop
-        // using the count condition. so the if only runs once
-        if (prevprops != this.props.match.params.id && this.state.count != 1) {
-            let beersData = [];
-            let promises = [];
-
-            for (let i = 0; i < stateArray.length - 1; i++) {
-                let beerId = stateArray[i].beer_id;
-
-                promises.push(
-                    axios.get(`https://api.punkapi.com/v2/beers/${beerId}`)
-                );
+    fetchUserData = async () => {
+        try {
+            this.setState({ loading: true, error: null });
+            
+            const response = await axios.get("/otheruser/" + this.props.match.params.id);
+            const userData = response.data;
+            
+            this.setState({ userData });
+            
+            // Extract beer IDs and fetch beer data
+            const beerIds = userData
+                .filter(item => item.beer_id)
+                .map(item => item.beer_id);
+            
+            if (beerIds.length > 0) {
+                await this.fetchBeerData(beerIds);
+            } else {
+                this.setState({ beersData: [], loading: false });
             }
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            this.setState({ error: "Failed to load user profile", loading: false });
+        }
+    }
 
-            Promise.all(promises).then(response => {
-                // console.log("logging data after promise all", response);
-                for (let i = 0; i < response.length; i++) {
-                    beersData.push(response[i].data[0]);
-                }
-                this.setState({ beersData, count: 1 });
-            });
+    fetchBeerData = async (beerIds) => {
+        try {
+            const promises = beerIds.map(beerId =>
+                axios.get(`https://api.punkapi.com/v2/beers/${beerId}`)
+            );
+            
+            const responses = await Promise.all(promises);
+            const beersData = responses.map(response => response.data[0]);
+            
+            this.setState({ beersData, loading: false });
+        } catch (error) {
+            console.error("Error fetching beer data:", error);
+            this.setState({ error: "Failed to load beer data", loading: false });
         }
     }
 
     render() {
-        console.log("this.state", this.state);
+        const { userData, beersData, loading, error } = this.state;
+
+        if (loading) {
+            return <div className="profileContainer">Loading profile...</div>;
+        }
+
+        if (error) {
+            return <div className="profileContainer">Error: {error}</div>;
+        }
+
+        if (!userData || userData.length === 0) {
+            return <div className="profileContainer">User not found</div>;
+        }
+
+        const user = userData[0];
 
         return (
             <div className="profileContainer">
-                {Object.keys(this.state).length >= 2 && (
-                    <div>
-                        <div className="profilePicContainer otherProf">
-                            <img
-                                className="profilePic"
-                                src={
-                                    this.state[0].imgurl
-                                        ? this.state[0].imgurl
-                                        : "./hop.png"
-                                }
-                                alt={this.props.username}
-                            />
-                            <div className="nameProfPic nameProf">
-                                {this.state[0].username}
-                            </div>
-                            <div className="nameProfPic">
-                                {this.state[0].age}
-                            </div>
-                            <div className="nameProfPic">
-                                {this.state[0].city}
-                            </div>
-                        </div>
+                <div className="profilePicContainer otherProf">
+                    <ImageWithFallback
+                        src={user.imgurl}
+                        fallback="./hop.png"
+                        className="profilePic"
+                        alt={user.username}
+                    />
+                    <div className="nameProfPic nameProf">
+                        {user.username}
                     </div>
-                )}
+                    <div className="nameProfPic">
+                        {user.age}
+                    </div>
+                    <div className="nameProfPic">
+                        {user.city}
+                    </div>
+                </div>
+                
                 <div className="beerCellarContainer">
                     <p className="beerCellarTitle">Cellar Collection</p>
-                    {this.state.count ? (
-                        <div className="beerCellar">
-                            {this.state.beersData.map(beer => (
-                                <div key={beer.id} className="beerContainer">
-                                    <div className="friendsListProfContainer">
-                                        <Link to={`/beer/${beer.id}`}>
-                                            <div className="beerPicAndName">
-                                                <img
-                                                    className="beerPic"
-                                                    src={
-                                                        beer.image_url
-                                                            ? beer.image_url
-                                                            : "/beer_bottle.png"
-                                                    }
-                                                    alt={beer.name}
-                                                />
-                                                <div className="nameBeerPic">
-                                                    {beer.name}
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    </div>
-                                    <LikeButton match={beer.id} />
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <h1 className="noBeersMsg">No Hops Yet!</h1>
-                    )}
+                    <BeerGrid
+                        beers={beersData}
+                        showLikeButton={true}
+                        likeButton={(beer) => <LikeButton match={beer.id} />}
+                        emptyMessage="No Hops Yet!"
+                    />
                 </div>
             </div>
         );

@@ -35,7 +35,7 @@ class Login extends Component {
                 }
             })
             .catch(function(err) {
-                console.log("Error for post route /login", err);
+                console.error("Login error:", err);
             });
     }
 

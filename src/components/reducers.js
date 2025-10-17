@@ -1,67 +1,88 @@
-// if (action.type === "ADD_LIST_ANIMALS") {
-//     // here i tell the reducer how to add the list of animals to global state
-//     // ALWAYS consol log the action to check
-//     // console.log(("action:", action));
-//     return {
-//         ...state,
-//         // call the property however you want
-//         listAnimals: action.listAnimals
-//     };
-// }
-
-export default function reducer(state = {}, action) {
-    if (action.type === "GET_BEERS") {
-        return {
-            ...state,
-            listBeers: action.beersList
-        };
+// Initial state
+const initialState = {
+    listBeers: [],
+    listCities: [],
+    chats: [],
+    onlineusers: [],
+    priv_chats: [],
+    loading: {
+        beers: false,
+        cities: false,
+        chats: false
+    },
+    errors: {
+        beers: null,
+        cities: null,
+        chats: null
     }
+};
 
-    if (action.type === "GET_CITIES") {
-        return {
-            ...state,
-            listCities: action.citiesList
-        };
+export default function reducer(state = initialState, action) {
+    switch (action.type) {
+        // Beer actions
+        case "GET_BEERS_START":
+            return {
+                ...state,
+                loading: { ...state.loading, beers: true },
+                errors: { ...state.errors, beers: null }
+            };
+        
+        case "GET_BEERS_SUCCESS":
+            return {
+                ...state,
+                listBeers: action.payload,
+                loading: { ...state.loading, beers: false },
+                errors: { ...state.errors, beers: null }
+            };
+        
+        case "GET_BEERS_ERROR":
+            return {
+                ...state,
+                loading: { ...state.loading, beers: false },
+                errors: { ...state.errors, beers: action.payload }
+            };
+
+        // Cities actions
+        case "GET_CITIES":
+            return {
+                ...state,
+                listCities: action.payload
+            };
+
+        // Chat actions
+        case "RECENT_CHATS":
+            return {
+                ...state,
+                chats: action.payload
+            };
+
+        case "NEW_CHAT":
+            return {
+                ...state,
+                chats: [...(state.chats || []), action.payload]
+            };
+
+        // Online users actions
+        case "ONLINE_USERS":
+            return {
+                ...state,
+                onlineusers: action.payload
+            };
+
+        // Private chat actions
+        case "RECENT_PRIV_CHATS":
+            return {
+                ...state,
+                priv_chats: action.payload
+            };
+
+        case "NEW_PRIV_CHAT":
+            return {
+                ...state,
+                priv_chats: [...(state.priv_chats || []), action.payload]
+            };
+
+        default:
+            return state;
     }
-
-    if (action.type === "RECENT_CHATS") {
-        return {
-            ...state,
-            chats: action.chats
-        };
-    }
-
-    if (action.type === "NEW_CHAT") {
-        return {
-            ...state,
-            // concat or spread operator
-            chats: [...state.chats, action.chat]
-        };
-    }
-
-    if (action.type === "ONLINE_USERS") {
-        return {
-            ...state,
-            onlineusers: action.onlineusers
-        };
-    }
-
-    if (action.type === "RECENT_PRIV_CHATS") {
-        return {
-            ...state,
-            priv_chats: action.priv_chats
-        };
-    }
-
-    if (action.type === "NEW_PRIV_CHAT") {
-        return {
-            ...state,
-            // concat or spread operator
-            priv_chats: [...state.priv_chats, action.priv_chat]
-        };
-    }
-
-    // console.log("state at reducer", state);
-
-    return state;
 }
