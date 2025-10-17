@@ -4,6 +4,7 @@ import axios from "./axios";
 import { Link } from "react-router-dom";
 import { PUNK_API_BASE_URL, DEFAULT_BEER_IMAGE, RANDOM_BEERS_COUNT, SEARCH_RESULTS_PER_PAGE } from "../constants";
 
+// Component for searching and discovering beers using the Punk API
 function FindBeer() {
     const [search, setSearch] = useState("");
     const [results, setResults] = useState([]);
@@ -11,8 +12,10 @@ function FindBeer() {
     const [error, setError] = useState("");
     const [init, setInit] = useState(0);
 
+    // Handle beer search and random beer loading
     useEffect(() => {
         (async () => {
+            // Load random beers on initial mount
             if (init == 0) {
                 let beersData = [];
                 let promises = [];
@@ -31,6 +34,7 @@ function FindBeer() {
                     setInit(1);
                 });
             } else {
+                // Search for beers by name
                 setError("");
                 let matches = await axios.get(
                     `${PUNK_API_BASE_URL}?beer_name=${search}&per_page=${SEARCH_RESULTS_PER_PAGE}`

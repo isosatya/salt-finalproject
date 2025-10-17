@@ -10,7 +10,7 @@ import OtherProfile from "./components/otherProfile";
 import FriendsList from "./components/beerCellar";
 import Chatting from "./components/chatting";
 
-
+// Main application component that handles routing and user state
 class App extends Component {
     constructor(props) {
         super(props);
@@ -22,29 +22,30 @@ class App extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    // Fetch user data when component mounts
     componentDidMount() {
         axios.get("/user").then(results => {
             this.setState(results.data[0]);
         });
     }
 
+    // Toggle the profile picture uploader modal
     toggleUploader() {
         this.state.uploader
             ? this.setState({ uploader: false })
             : this.setState({ uploader: true });
     }
 
+    // Handle file selection for profile picture upload
     handleFileChange(e) {
-        // assigning the file that was selected to this.file.state
         this.setState({ file: e.target.files[0] });
     }
 
+    // Upload selected profile picture to server
     uploadPic() {
-        // create the FormData object
         var formData = new FormData();
-        // assign the file in this.state to the Form
         formData.append("file", this.state.file);
-        // posting the new file to the backend
+        
         axios
             .post("/upload", formData)
             .then(resp => {
@@ -58,10 +59,12 @@ class App extends Component {
             });
     }
 
+    // Handle bio text input changes
     handleChange(e) {
         this.setState({ bio: e.target.value });
     }
 
+    // Submit bio update to server
     handleSubmit(e) {
         e.preventDefault();
         axios.post("/updatebio", { bio: this.state.bio });

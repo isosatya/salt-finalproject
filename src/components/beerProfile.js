@@ -5,12 +5,14 @@ import LikeButton from "./likeButton";
 import { PUNK_API_BASE_URL, DEFAULT_BEER_IMAGE } from "../constants";
 import { filterBeerIngredients } from "../utils/ingredients";
 
+// Component for displaying detailed beer information from the Punk API
 class BeerProfile extends Component {
     constructor(props) {
         super(props);
         this.state = {};
     }
 
+    // Fetch beer data from Punk API and filter duplicate ingredients
     componentDidMount() {
         let beerId = this.props.match.params.id;
 

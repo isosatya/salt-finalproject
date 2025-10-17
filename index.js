@@ -1,4 +1,5 @@
 
+// Main server file for the beer social network application
 const express = require("express");
 const app = express();
 const compression = require("compression");
@@ -14,12 +15,14 @@ const io = require("socket.io")(server, {
     origins: "localhost:8080 http://127.0.0.1:8080/ https://salt-finalproject.herokuapp.com:*"
 });
 
-// Image upload settings
+// Image upload configuration for profile pictures
 const urlPrefx = "https://s3.amazonaws.com/andres-spiced/";
 const s3 = require("./s3");
 var multer = require("multer");
 var uidSafe = require("uid-safe");
 var path = require("path");
+
+// Configure multer for file uploads with unique filenames
 var diskStorage = multer.diskStorage({
     destination: function(req, file, callback) {
         callback(null, __dirname + "/uploads");
@@ -30,10 +33,11 @@ var diskStorage = multer.diskStorage({
         });
     }
 });
+
 var uploader = multer({
     storage: diskStorage,
     limits: {
-        fileSize: 2097152
+        fileSize: 2097152 // 2MB limit
     }
 });
 //////////////////////////////////////////// Cookie and Socket settings

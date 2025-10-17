@@ -1,5 +1,7 @@
 
+// Redux reducer for managing application state
 export default function reducer(state = {}, action) {
+    // Updates the user's beer cellar list
     if (action.type === "GET_BEERS") {
         return {
             ...state,
@@ -7,6 +9,7 @@ export default function reducer(state = {}, action) {
         };
     }
 
+    // Updates the list of available cities
     if (action.type === "GET_CITIES") {
         return {
             ...state,
@@ -14,6 +17,7 @@ export default function reducer(state = {}, action) {
         };
     }
 
+    // Loads recent chat messages
     if (action.type === "RECENT_CHATS") {
         return {
             ...state,
@@ -21,14 +25,15 @@ export default function reducer(state = {}, action) {
         };
     }
 
+    // Adds a new chat message to the existing list
     if (action.type === "NEW_CHAT") {
         return {
             ...state,
-            // concat or spread operator
             chats: [...state.chats, action.chat]
         };
     }
 
+    // Updates the list of online users
     if (action.type === "ONLINE_USERS") {
         return {
             ...state,
@@ -36,6 +41,7 @@ export default function reducer(state = {}, action) {
         };
     }
 
+    // Loads recent private chat messages
     if (action.type === "RECENT_PRIV_CHATS") {
         return {
             ...state,
@@ -43,10 +49,10 @@ export default function reducer(state = {}, action) {
         };
     }
 
+    // Adds a new private chat message to the existing list
     if (action.type === "NEW_PRIV_CHAT") {
         return {
             ...state,
-            // concat or spread operator
             priv_chats: [...state.priv_chats, action.priv_chat]
         };
     }

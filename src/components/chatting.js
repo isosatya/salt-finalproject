@@ -5,6 +5,7 @@ import { socket } from "./socket";
 import PrivChatting from "./privChatting";
 import { DEFAULT_PROFILE_IMAGE, DEFAULT_HOP_IMAGE } from "../constants";
 
+// Main chat component with public and private messaging functionality
 class Chatting extends Component {
     constructor() {
         super();
@@ -15,6 +16,7 @@ class Chatting extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.submitChat = this.submitChat.bind(this);
     }
+    // Auto-scroll chat to bottom on mount
     componentDidMount() {
         if (this.chatwindow.current) {
             this.chatwindow.current.scrollTop =
@@ -23,6 +25,7 @@ class Chatting extends Component {
         }
     }
 
+    // Auto-scroll chat to bottom when new messages arrive
     componentDidUpdate() {
         if (this.chatwindow.current) {
             this.chatwindow.current.scrollTop =
@@ -31,10 +34,12 @@ class Chatting extends Component {
         }
     }
 
+    // Handle chat input changes
     handleChange(e) {
         this.setState({ chat: e.target.value });
     }
 
+    // Send chat message via socket
     submitChat() {
         if (this.chattext.current.value != "") {
             socket.emit("chatMessage", this.state.chat);
