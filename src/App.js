@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import axios from "./components/axios";
 import Profile from "./components/profile";
 import BeerProfile from "./components/beerProfile";
@@ -7,7 +7,6 @@ import Uploader from "./components/uploader";
 import FindBeer from "./components/findBeer";
 import Header from "./components/header";
 import OtherProfile from "./components/otherProfile";
-import FriendsList from "./components/beerCellar";
 import Chatting from "./components/chatting";
 
 // Main application component that handles routing and user state
