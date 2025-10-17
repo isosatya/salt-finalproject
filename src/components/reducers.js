@@ -1,13 +1,3 @@
-// if (action.type === "ADD_LIST_ANIMALS") {
-//     // here i tell the reducer how to add the list of animals to global state
-//     // ALWAYS consol log the action to check
-//     // console.log(("action:", action));
-//     return {
-//         ...state,
-//         // call the property however you want
-//         listAnimals: action.listAnimals
-//     };
-// }
 
 export default function reducer(state = {}, action) {
     if (action.type === "GET_BEERS") {
@@ -61,7 +51,6 @@ export default function reducer(state = {}, action) {
         };
     }
 
-    // console.log("state at reducer", state);
 
     return state;
 }

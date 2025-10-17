@@ -1,6 +1,5 @@
 var bcrypt = require("bcryptjs");
 
-// we call this function in the registration POST route, we then insert the hash in the users.sql table
 module.exports.hashPassword = function hashPassword(plainTextPassword) {
     return new Promise(function(resolve, reject) {
         bcrypt.genSalt(function(err, salt) {
@@ -17,7 +16,6 @@ module.exports.hashPassword = function hashPassword(plainTextPassword) {
     });
 };
 
-// this should be called in the POST login route, and using the hash value in the users.sql table
 module.exports.checkPassword = function checkPassword(
     textEnteredInLoginForm,
     hashedPasswordFromDatabase

@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-///////////////////////// For the Socket events to work
 import { socket } from "./socket";
 import PrivChatting from "./privChatting";
-
-//////////////////////////////////
+import { DEFAULT_PROFILE_IMAGE, DEFAULT_HOP_IMAGE } from "../constants";
 
 class Chatting extends Component {
     constructor() {
@@ -56,7 +54,6 @@ class Chatting extends Component {
                 </div>
                 <div
                     className="onlineUsers"
-                    // onClick={e => console.log("e.target user", e.target)}
                 >
                     <h1 className="onlineTitle">Online Hopsters</h1>
                     {this.props.cities && (
@@ -98,7 +95,7 @@ class Chatting extends Component {
                                             src={
                                                 user.imgurl
                                                     ? user.imgurl
-                                                    : "./hop.png"
+                                                    : DEFAULT_HOP_IMAGE
                                             }
                                             alt={user.username}
                                         />
@@ -125,7 +122,7 @@ class Chatting extends Component {
                                                 src={
                                                     chat.imgurl
                                                         ? chat.imgurl
-                                                        : "./uglydog.jpg"
+                                                        : DEFAULT_PROFILE_IMAGE
                                                 }
                                                 alt={chat.username}
                                             />

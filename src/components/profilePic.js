@@ -1,24 +1,17 @@
-import React, { Component } from "react";
-// import { HashRouter, Route } from "react-router-dom";
+import React from "react";
+import { DEFAULT_HOP_IMAGE } from "../constants";
 
-class ProfilePic extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
-    }
-
-    render() {
-        return (
-            <div>
-                <img
-                    className="profilePic"
-                    src={this.props.imgurl ? this.props.imgurl : "./hop.png"}
-                    alt={this.props.username}
-                    onClick={this.props.toggle}
-                />
-            </div>
-        );
-    }
+function ProfilePic({ imgurl, username, onToggle }) {
+    return (
+        <div>
+            <img
+                className="profilePic"
+                src={imgurl ? imgurl : DEFAULT_HOP_IMAGE}
+                alt={username}
+                onClick={onToggle}
+            />
+        </div>
+    );
 }
 
 export default ProfilePic;

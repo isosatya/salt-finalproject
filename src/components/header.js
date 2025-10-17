@@ -1,5 +1,6 @@
-import React, { Component } from "react";
-import { BrowserRouter, Route, Link } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
+import { DEFAULT_PROFILE_IMAGE } from "../constants";
 
 function Header({ imgurl, username }) {
     return (
@@ -31,7 +32,7 @@ function Header({ imgurl, username }) {
                 </div>
                 <img
                     className="headerPic"
-                    src={imgurl ? imgurl : "./uglydog.jpg"}
+                    src={imgurl ? imgurl : DEFAULT_PROFILE_IMAGE}
                     alt={username}
                 />
             </div>

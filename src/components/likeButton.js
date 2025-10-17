@@ -1,9 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 import { useState, useEffect } from "react";
 import axios from "./axios";
-import { Link } from "react-router-dom";
-
-// import useUpdateFriendship from "./updateFriendship";
+import { BUTTON_UPDATE_DELAY } from "../constants";
 
 function LikeButton(match) {
     const [button, setButton] = useState("");
@@ -15,12 +13,12 @@ function LikeButton(match) {
                 if (results.data.status == 1) {
                     setTimeout(() => {
                         setButton("Add Beer to Cellar");
-                    }, 300);
+                    }, BUTTON_UPDATE_DELAY);
                 }
                 if (results.data.status == 2) {
                     setTimeout(() => {
                         setButton("Remove from Cellar");
-                    }, 300);
+                    }, BUTTON_UPDATE_DELAY);
                 }
             });
         })();

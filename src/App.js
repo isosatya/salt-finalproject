@@ -10,8 +10,6 @@ import OtherProfile from "./components/otherProfile";
 import FriendsList from "./components/beerCellar";
 import Chatting from "./components/chatting";
 
-///////////// this one is for using HOOKS
-// import { useState, useEffect } from "react";
 
 class App extends Component {
     constructor(props) {
@@ -50,7 +48,6 @@ class App extends Component {
         axios
             .post("/upload", formData)
             .then(resp => {
-                console.log("picture uploaded", resp.data);
                 this.setState({
                     imgurl: resp.data,
                     file: null,
@@ -58,7 +55,6 @@ class App extends Component {
                 });
             })
             .catch(function(err) {
-                console.log("Error when uploading picture", err);
             });
     }
 
@@ -92,9 +88,9 @@ class App extends Component {
                                             city={this.state.city}
                                             imgurl={this.state.imgurl}
                                             created_at={this.state.created_at}
-                                            toggle={this.toggleUploader}
-                                            handleChange={this.handleChange}
-                                            handleSubmit={this.handleSubmit}
+                                            onToggleUploader={this.toggleUploader}
+                                            onChange={this.handleChange}
+                                            onSubmit={this.handleSubmit}
                                         />
                                     )}
                                 />
@@ -130,9 +126,9 @@ class App extends Component {
                         </BrowserRouter>
                         {this.state.uploader && (
                             <Uploader
-                                toggle={this.toggleUploader}
-                                upload={this.uploadPic}
-                                file={this.handleFileChange}
+                                onToggle={this.toggleUploader}
+                                onUpload={this.uploadPic}
+                                onFileChange={this.handleFileChange}
                             />
                         )}
                     </div>

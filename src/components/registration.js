@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "./axios";
 import { Link } from "react-router-dom";
-import { functionDeclaration } from "@babel/types";
+import { MAPBOX_API_BASE_URL, MAPBOX_ACCESS_TOKEN } from "../constants";
 
 class Registration extends Component {
     constructor() {
@@ -21,18 +21,13 @@ class Registration extends Component {
     }
 
     componentDidUpdate() {
-        // console.log("this.state.city", this.state.city);
-        // console.log("this.state.matches", this.state.matches);
 
         if (this.state.city) {
             let results = [];
-            console.log("doing the search");
 
             axios
                 .get(
-                    `https://api.mapbox.com/geocoding/v5/mapbox.places/${
-                        this.state.city
-                    }.json?access_token=pk.eyJ1IjoiYW5kcmVzc2luZ2giLCJhIjoiY2p4OTBvYXc5MHF5eDN6bzFjcmptajJpcSJ9.5Tol6P4vdEEbHtgyOzZcQw&country=DE&types=region,place`
+                    `${MAPBOX_API_BASE_URL}/${this.state.city}.json?access_token=${MAPBOX_ACCESS_TOKEN}&country=DE&types=region,place`
                 )
                 .then(response => {
                     if (response.data.features.length) {
@@ -60,8 +55,6 @@ class Registration extends Component {
     handleSubmit(e) {
         // no submission needed because axios does the job instead
         e.preventDefault();
-        console.log("this.state", this.state);
-        console.log("this.cityRef.current.value", this.cityRef.current.value);
 
         axios
             .post("/register", {

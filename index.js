@@ -1,4 +1,3 @@
-//////////////////// TESTING GITHUUBBB
 
 const express = require("express");
 const app = express();
@@ -6,27 +5,21 @@ const compression = require("compression");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 var cookieSession = require("cookie-session");
-////// for the csrf token
 const csurf = require("csurf");
 const db = require("./utils/db");
-const bc = require("./utils/bc"); // BECRYPT FOR HASHING AND CHECKING PASSWORDS
-////////////////////// SETTINGS FOR SOCKET (CHAT)
+const bc = require("./utils/bc");
+const { formatDate } = require("./src/utils/dateFormat");
 const server = require("http").Server(app);
 const io = require("socket.io")(server, {
-    origins:
-        "localhost:8080 http://127.0.0.1:8080/ https://salt-finalproject.herokuapp.com:*"
+    origins: "localhost:8080 http://127.0.0.1:8080/ https://salt-finalproject.herokuapp.com:*"
 });
-///////////////////////////
 
-//////////////////////////////////////////// Image upload settings
-// const for constructing the url address
+// Image upload settings
 const urlPrefx = "https://s3.amazonaws.com/andres-spiced/";
-// This is the module that uploads the image to Amazon
 const s3 = require("./s3");
 var multer = require("multer");
 var uidSafe = require("uid-safe");
 var path = require("path");
-// This uploads the image to the local storate
 var diskStorage = multer.diskStorage({
     destination: function(req, file, callback) {
         callback(null, __dirname + "/uploads");
@@ -37,7 +30,6 @@ var diskStorage = multer.diskStorage({
         });
     }
 });
-// These are the parameters for the upload
 var uploader = multer({
     storage: diskStorage,
     limits: {
@@ -97,9 +89,7 @@ app.post("/register", function(req, res) {
     let city = req.body.city;
     let email = req.body.email;
     let password = req.body.password;
-    console.log("req. body registration form", req.body);
 
-    // hashing the password with a function
     bc.hashPassword(password)
         .then(hash => {
             db.addUsers(username, age, city, email, hash)
@@ -127,7 +117,6 @@ app.post("/register", function(req, res) {
 });
 
 app.post("/login", (req, res) => {
-    // console.log("req. body for login", req.body);
     var email = req.body.email;
     var password = req.body.password;
     db.login(email)
@@ -158,21 +147,16 @@ app.get("/logout", (req, res) => {
 
 app.get("/delete", (req, res) => {
     const user = req.session.usersId;
-    console.log("user for deleting profile", user);
 
     db.getPicsUserDatabase(user).then(results => {
-        // console.log(results.rows);
         let images = results.rows.map(image => image.imgurl.slice(39));
-        // console.log("images", images);
         s3.delete(images);
         db.deletePicsUserDatabase(user).then(() => {
             db.deleteUserFriendships(user).then(() => {
                 db.deleteUser(user).then(() => {
-                    console.log("user delete in backend");
                     req.session = null;
                     res.redirect("/");
                 });
-                // console.log("friendships deleted");
             });
         });
     });
@@ -196,7 +180,6 @@ app.get("/otheruser/:id", (req, res) => {
         .then(results => {
             if (!results.rows.length) {
                 db.getUserInfo(id).then(results => {
-                    console.log("results for getUserInfo", results.rows);
                     res.json(results.rows);
                 });
             } else {
@@ -217,7 +200,6 @@ app.get("/users/:val", (req, res) => {
                 if (results.rows.length == 0) {
                     res.json({ error: 2 });
                 } else {
-                    // console.log("results of search", results.rows);
                     res.json(results.rows);
                 }
             })
@@ -278,7 +260,6 @@ app.post("/upload", uploader.single("file"), s3.upload, function(req, res) {
 app.get("/beers_list", (req, res) => {
     const id = req.session.usersId;
     db.likedBeersList(id).then(results => {
-        // console.log("results for likedBeerList query", results.rows);
         res.json(results.rows);
     });
 });
@@ -299,30 +280,19 @@ app.get("*", function(req, res) {
     }
 });
 
-// We change "app.listen" with "server.listen" so we can use the Socket functionality
-// it's server, not app, that does the listening
 server.listen(process.env.PORT || 8080, function() {
     console.log("I'm listening.");
 });
 
-//////////////////////////////////////// Socket Events
+// Socket Events
 const onlineUsers = {};
-function dateFormat(date) {
-    return new Date(date).toLocaleString();
-}
 
 io.on("connection", function(socket) {
-    // console.log(`socket with the id ${socket.id} is now connected`);
 
-    // if there is no user connected, just return "disconect"
     if (!socket.request.session.usersId) {
         return socket.disconnect(true);
     }
     const usersId = socket.request.session.usersId;
-    // console.log(
-    //     `socket with the id ${socket.id} is now connected with user ${usersId}`
-    // );
-    // console.log("online users", onlineUsers);
 
     const onlineUsersArray = Object.values(onlineUsers);
 
@@ -334,11 +304,8 @@ io.on("connection", function(socket) {
         onlineUsers[socket.id] = usersId;
     }
 
-    // console.log("online users after connect", onlineUsers);
 
     db.onlineUsersInfo(Object.values(onlineUsers)).then(results => {
-        // console.log("onlineUsersInfo query results", results.rows);
-        // socket.emit("onlineUsers", results.rows); //--> emit does the job
         io.sockets.emit("userJoinedOrLeft", results.rows);
     });
 
@@ -356,7 +323,7 @@ io.on("connection", function(socket) {
                 io.sockets.emit("userJoinedOrLeft", filtered);
                 db.getRecentChatsCity(city).then(results => {
                     results.rows.map(
-                        item => (item.created_at = dateFormat(item.created_at))
+                        item => (item.created_at = formatDate(item.created_at))
                     );
 
                     socket.emit("chatMessages", results.rows.reverse());
@@ -368,7 +335,7 @@ io.on("connection", function(socket) {
     socket.on("refreshChats", () => {
         db.getRecentChats().then(results => {
             results.rows.map(
-                item => (item.created_at = dateFormat(item.created_at))
+                item => (item.created_at = formatDate(item.created_at))
             );
             socket.emit("chatMessages", results.rows.reverse());
 
@@ -379,22 +346,19 @@ io.on("connection", function(socket) {
     });
 
     db.getRecentChats().then(results => {
-        // console.log("results for the getRecentChats query", results.rows);
         results.rows.map(
             item => (item.created_at = dateFormat(item.created_at))
         );
-        // console.log("db.getRecentChats", results.rows);
 
         socket.emit("chatMessages", results.rows.reverse());
     });
 
     socket.on("chatMessage", msg => {
-        // console.log("listened to chatMessage event ", msg);
 
         db.addChatMsg(usersId, msg).then(results => {
             db.getChatAndUserInfo(usersId, results.rows[0].id).then(results => {
                 results.rows.map(
-                    item => (item.created_at = dateFormat(item.created_at))
+                    item => (item.created_at = formatDate(item.created_at))
                 );
 
                 io.sockets.emit("chatMessage", results.rows[0]);
@@ -403,9 +367,6 @@ io.on("connection", function(socket) {
     });
 
     socket.on("privateChatUser", user => {
-        // console.log("usersId who is logged in", usersId);
-        // console.log("other user from chat", user);
-        // console.log("online users table", onlineUsers);
 
         // finding the socket id of the user with whom the chat takes place
         function getSocketIdByUser(object, value) {
@@ -413,15 +374,13 @@ io.on("connection", function(socket) {
         }
 
         const recipientSocketId = getSocketIdByUser(onlineUsers, user);
-        // console.log(`socketId for user ${user}`, recipientSocketId);
 
         db.getRecentPrivateChats(usersId, user).then(results => {
             if (user != usersId) {
                 results.rows.map(
-                    item => (item.created_at = dateFormat(item.created_at))
+                    item => (item.created_at = formatDate(item.created_at))
                 );
 
-                // console.log("recent private chats", results.rows);
 
                 io.sockets.sockets[recipientSocketId].emit(
                     "privateChatMsgs",
@@ -432,24 +391,17 @@ io.on("connection", function(socket) {
         });
 
         socket.on("privateChatMessage", msg => {
-            console.log("listened private to chatMessage event ", msg);
 
             db.addPrivateChatMsg(usersId, user, msg)
                 .then(results => {
-                    // console.log("results for addChatMsg", results.rows);
                     db.getPrivateChatAndUserInfo(
                         usersId,
                         results.rows[0].id
                     ).then(results => {
-                        // console.log(
-                        //     "getPrivateChatAndUserInfo results",
-                        //     results.rows[0]
-                        // );
                         results.rows.map(
                             item =>
                                 (item.created_at = dateFormat(item.created_at))
                         );
-                        // io.sockets.emit("privateChatMsg", results.rows[0]);
                         io.sockets.sockets[recipientSocketId].emit(
                             "privateChatMsg",
                             results.rows[0]

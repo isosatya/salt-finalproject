@@ -15,7 +15,6 @@ export function initSocket(store) {
     }
 
     socket.on("citiesList", list => {
-        // console.log("cities list", list);
         store.dispatch(getCities(list));
     });
 
@@ -24,27 +23,20 @@ export function initSocket(store) {
     });
 
     socket.on("chatMessage", msg => {
-        // console.log("message from backend", msg);
 
         store.dispatch(chatMessage(msg));
     });
 
     socket.on("userJoinedOrLeft", users => {
-        // console.log("data coming from backend", users);
 
         store.dispatch(userJoinedOrLeft(users));
     });
 
     socket.on("privateChatMsgs", msgs => {
-        // console.log("private messages received from backend", msgs);
         store.dispatch(privateChatMessages(msgs));
     });
 
     socket.on("privateChatMsg", msg => {
-        // console.log(
-        //     "private messages received from backend privateChatMsg",
-        //     msg
-        // );
         store.dispatch(privateChatMessage(msg));
     });
 

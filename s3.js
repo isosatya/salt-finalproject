@@ -3,9 +3,9 @@ const fs = require("fs");
 
 let secrets;
 if (process.env.NODE_ENV == "production") {
-    secrets = process.env; // in prod the secrets are environment variables
+    secrets = process.env;
 } else {
-    secrets = require("./secrets"); // secrets.json is in .gitignore
+    secrets = require("./secrets");
 }
 const client = knox.createClient({
     key: secrets.AWS_KEY,
@@ -35,9 +35,6 @@ module.exports.upload = function(req, res, next) {
             next();
         } else {
             res.sendStatus(500);
-            // res.json({
-            //     success: wasSuccessful
-            // });
         }
     });
 };
@@ -47,17 +44,4 @@ module.exports.delete = function(images) {
         console.log("response from amazon", res.statusCode);
     });
 
-    // s3Request.on("response", s3Response => {
-    //     console.log("s3Response.statusCode", s3Response.statusCode);
-
-    // const wasSuccessful = s3Response.statusCode == 200;
-    // if (wasSuccessful) {
-    //     next();
-    // } else {
-    //     res.sendStatus(500);
-    //     // res.json({
-    //     //     success: wasSuccessful
-    //     // });
-    // }
-    // });
 };

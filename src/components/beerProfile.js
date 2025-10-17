@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import axios from "./axios";
 import { Link } from "react-router-dom";
 import LikeButton from "./likeButton";
-// import ProfilePic from "./profilePic";
+import { PUNK_API_BASE_URL, DEFAULT_BEER_IMAGE } from "../constants";
+import { filterBeerIngredients } from "../utils/ingredients";
 
 class BeerProfile extends Component {
     constructor(props) {
@@ -12,31 +13,11 @@ class BeerProfile extends Component {
 
     componentDidMount() {
         let beerId = this.props.match.params.id;
-        console.log("beerId", beerId);
 
-        axios.get(`https://api.punkapi.com/v2/beers/${beerId}`).then(resp => {
+        axios.get(`${PUNK_API_BASE_URL}/${beerId}`).then(resp => {
             let data = resp.data[0];
-
-            // --------------------Filtering repeated ingredients
-            let arrayHops = data.ingredients.hops;
-            var obj = {};
-            for (var i = 0, len = arrayHops.length; i < len; i++)
-                obj[arrayHops[i]["name"]] = arrayHops[i];
-            arrayHops = new Array();
-            for (var key in obj) arrayHops.push(obj[key]);
-
-            let arrayMalts = data.ingredients.malt;
-            var obj2 = {};
-            for (i = 0, len = arrayMalts.length; i < len; i++)
-                obj2[arrayMalts[i]["name"]] = arrayMalts[i];
-            arrayMalts = new Array();
-            for (key in obj2) arrayMalts.push(obj2[key]);
-            // ---------------------------------------------
-
-            data.ingredients.hops = arrayHops;
-            data.ingredients.malt = arrayMalts;
-
-            this.setState(data);
+            const filteredData = filterBeerIngredients(data);
+            this.setState(filteredData);
         });
     }
 
@@ -77,7 +58,7 @@ class BeerProfile extends Component {
                         src={
                             this.state.image_url
                                 ? this.state.image_url
-                                : "/beer_bottle.png"
+                                : DEFAULT_BEER_IMAGE
                         }
                         className="beerProfPic"
                         alt={this.state.name}

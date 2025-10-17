@@ -27,7 +27,6 @@ class Profile extends Component {
 
     delete() {
         axios.get("/delete").then(() => {
-            console.log("user deleted");
             location.reload();
         });
     }
@@ -40,7 +39,7 @@ class Profile extends Component {
                         <ProfilePic
                             username={this.props.username}
                             imgurl={this.props.imgurl}
-                            toggle={this.props.toggle}
+                            onToggle={this.props.onToggleUploader}
                         />
                         <div className="nameProfPic nameProf">
                             {this.props.username}
